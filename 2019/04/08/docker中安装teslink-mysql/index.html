@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="docker,mysql," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用docker搭建一个testlink服务器，外连公司的mysql数据库，可以方便地对数据做迁移">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker中安装teslink+mysql">
+<meta property="og:url" content="http://xdthesun.github.io/2019/04/08/docker%E4%B8%AD%E5%AE%89%E8%A3%85teslink-mysql/index.html">
+<meta property="og:site_name" content="xdthesun">
+<meta property="og:description" content="使用docker搭建一个testlink服务器，外连公司的mysql数据库，可以方便地对数据做迁移">
+<meta property="og:image" content="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
+<meta property="og:image" content="https://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg">
+<meta property="article:published_time" content="2019-04-07T23:30:39.000Z">
+<meta property="article:modified_time" content="2019-12-27T10:56:31.169Z">
+<meta property="article:author" content="xdthesun">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xdthesun.github.io/2019/04/08/docker中安装teslink-mysql/"/>
+
+
+
+
+
+  <title>docker中安装teslink+mysql | xdthesun</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xdthesun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xdthesun.github.io/2019/04/08/docker%E4%B8%AD%E5%AE%89%E8%A3%85teslink-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xdthesun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdthesun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker中安装teslink+mysql</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-08T07:30:39+08:00">
+                2019-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/08/docker%E4%B8%AD%E5%AE%89%E8%A3%85teslink-mysql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/08/docker%E4%B8%AD%E5%AE%89%E8%A3%85teslink-mysql/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>使用docker搭建一个testlink服务器，外连公司的mysql数据库，可以方便地对数据做迁移<a id="more"></a></p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><ol>
+<li>安装docker</li>
+<li>确定一个可用的数据库</li>
+</ol>
+<h1 id="容器初始化并定制"><a href="#容器初始化并定制" class="headerlink" title="容器初始化并定制"></a>容器初始化并定制</h1><h2 id="pull原生镜像"><a href="#pull原生镜像" class="headerlink" title="pull原生镜像"></a>pull原生镜像</h2><p>pull原生centos镜像，pull成功的话如下所示，若在pull过程中下载较慢或者无法连接，请尝试更换docker源后再pull</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos[:TAG]  <span class="comment">#不指定tag时默认tag为latest</span></span><br><span class="line">$ docker pull centos</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/centos</span><br><span class="line">8ba884070f61: Pull complete </span><br><span class="line">Digest: sha256:8d487d68857f5bc9595793279b33d082b03713341ddec91054382641d14db861</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> centos:latest</span><br></pre></td></tr></table></figure>
+<p>使用以下命令来查看本地的docker image：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<h2 id="运行centos镜像"><a href="#运行centos镜像" class="headerlink" title="运行centos镜像"></a>运行centos镜像</h2><p>执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --privileged  -dit -p 80:80 -e <span class="string">"container=docker"</span>  --name testlink_server centos   /usr/sbin/init</span><br></pre></td></tr></table></figure>
+<p>参数说明</p>
+<blockquote>
+<p>–privileged<br>-dit   后台运行<br>-p  端口映射<br>-e  设置环境变量<br>–name  设置运行容器名</p>
+</blockquote>
+<p>再执行docker  exec进入容器终端操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it testlink_server  /bin/bash</span><br></pre></td></tr></table></figure>
+<h2 id="安装apache"><a href="#安装apache" class="headerlink" title="安装apache"></a>安装apache</h2><p>使用centos自带的包管理工具yum来安装apache</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y update   <span class="comment">#更新软件</span></span><br><span class="line">yum install httpd -y    <span class="comment">#安装apache</span></span><br></pre></td></tr></table></figure>
+<p>等待以上命令安装成功后启动apache并将apach加入到开机自启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start httpd    <span class="comment">#启动apache服务</span></span><br><span class="line">systemctl <span class="built_in">enable</span>  httpd   <span class="comment">#设置apache开机自启动</span></span><br></pre></td></tr></table></figure>
+<p>若在使用systemctl时提示<em>Failed to get D-Bus connection: Operation not permitted</em>，请检查容器是否使用–privileged启动，详细解决方法可参考<a href="https://blog.csdn.net/weixin_42123737/article/details/87984996" target="_blank" rel="noopener">Centos7 Docker容器中报错 Failed to get D-Bus connection: Operation not permitted</a><br>此时可以打开本地浏览器<a href="http://localhost/" target="_blank" rel="noopener">http://localhost/</a> 若提示展示如下页面，则表明apache服务启动成功<br><img src="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail" alt="图片"></p>
+<h2 id="安装php5-6"><a href="#安装php5-6" class="headerlink" title="安装php5.6"></a>安装php5.6</h2><p>添加centOS 7.0源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br><span class="line">rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</span><br></pre></td></tr></table></figure>
+<p>yum源配置好后安装PHP5.6</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install --enablerepo=remi --enablerepo=remi-php56 php php-opcache php-devel php-mbstring php-mcrypt php-mysqlnd php-phpunit-PHPUnit php-pecl-xdebug php-pecl-xhprof</span><br></pre></td></tr></table></figure>
+<p>安装完成后建议执行clean来清除一些多余缓存，以减少生成的镜像的大小</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br></pre></td></tr></table></figure>
+<p>检查当前php版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># php -v</span></span><br><span class="line">PHP 5.6.40 (cli) (built: Mar 15 2019 15:26:44) </span><br><span class="line">Copyright (c) 1997-2016 The PHP Group</span><br><span class="line">Zend Engine v2.6.0, Copyright (c) 1998-2016 Zend Technologies</span><br><span class="line">    with Zend OPcache v7.0.6-dev, Copyright (c) 1999-2016, by Zend Technologies</span><br><span class="line">    with Xdebug v2.5.5, Copyright (c) 2002-2017, by Derick Rethans</span><br></pre></td></tr></table></figure>
+<p>注意：若当前版本小于5.6，则在运行最新版testlink的php代码时会报错</p>
+<h2 id="安装testlink"><a href="#安装testlink" class="headerlink" title="安装testlink"></a>安装testlink</h2><h3 id="下载testlink包"><a href="#下载testlink包" class="headerlink" title="下载testlink包"></a>下载testlink包</h3><p>我们使用最新版testlink 1.9.19，其他版本请到<a href="https://sourceforge.net/p/testlink/activity/?page=0&limit=100#5c475ad6ee24ca086c403833" target="_blank" rel="noopener">testlink官网</a>下载<br>方法一.在centos容器中 使用wget直接下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://nchc.dl.sourceforge.net/project/testlink/TestLink%201.9/TestLink%201.9.19/testlink-1.9.19.tar.gz</span><br></pre></td></tr></table></figure>
+<p>方法二.在宿主机上下载后复制到容器中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://nchc.dl.sourceforge.net/project/testlink/TestLink%201.9/TestLink%201.9.19/testlink-1.9.19.tar.gz</span><br><span class="line">docker cp testlink-1.9.19.tar.gz testlink_server:/</span><br></pre></td></tr></table></figure>
+<p>ps：推荐使用方法二，这样就无需在容器中安装wget了，使得制作的镜像相对来说比较小</p>
+<h3 id="解压testlink包并安装"><a href="#解压testlink包并安装" class="headerlink" title="解压testlink包并安装"></a>解压testlink包并安装</h3><p>容器中执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zvxf testlink-1.9.19.tar.gz testlink</span><br></pre></td></tr></table></figure>
+<p>拷贝testlink到apache服务的指定目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv testlink-1.9.19 /var/www/html/testlink</span><br></pre></td></tr></table></figure>
+<p>重启apache服务后访问<a href="http://localhost/testlink" target="_blank" rel="noopener">http://localhost/testlink</a> 可进入如下界面则表明apache已安装成功<br><img src="https://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail" alt="图片"></p>
+<h2 id="配置testlink"><a href="#配置testlink" class="headerlink" title="配置testlink"></a>配置testlink</h2><h3 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h3><p><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg" alt="图片"><br>php配置文件目录为</p>
+<blockquote>
+<p>/etc/php.ini</p>
+</blockquote>
+<p>根据提示修改<br>A、Maximum Session Idle Time before Timeout 24 minutes and 0 seconds - (Short. Consider to extend.)<br>解决：php.ini文件修改： session.gc_maxlifetime的值为2400<br>B、Checking max. execution time (Parameter max_execution_time)<br>解决：php.ini文件修改：<br>max_execution_time = 120<br>C. Checking Postgres Database Failed! Postgres Database cannot be used.<br>Checking MSSQL Database Failed！<br>解决：如连接MySQL，不用处理该警告，否则安装即可<br>D、Checking LDAP library OK<br>解决：php.ini文件修改如下：<br>extension=php_ldap.dll<br>发现没有php_ldap.dll，安装PHP的LDAP扩展，还是没有，发现名字换了，于是把php_ldap.dll换成ldap.dll，不再报错</p>
+<h3 id="添加对应目录并增加读写权限"><a href="#添加对应目录并增加读写权限" class="headerlink" title="添加对应目录并增加读写权限"></a>添加对应目录并增加读写权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 /var/www/html/testlink/gui/templates_c </span><br><span class="line">mkdir /var/testlink</span><br><span class="line">mkdir /var/testlink/logs/</span><br><span class="line">mkdir /var/testlink/upload_area/</span><br><span class="line">chmod 777 /var/testlink/logs/</span><br><span class="line">chmod 77 /var/testlink/upload_area/</span><br></pre></td></tr></table></figure>
+<h3 id="配置数据库"><a href="#配置数据库" class="headerlink" title="配置数据库"></a>配置数据库</h3><p>配置数据库有两种方法，适用于不同的场景<br>方法一.手动生成数据表结构并添加对应的配置文件<br>适用条件：已有数据库，只需要单独添加teslink的数据库即可，方便数据的迁移<br>操作步骤：</p>
+<ol>
+<li>在对应数据库中执行：<br>CREATE DATABASE testlink CHARACTER SET utf8 COLLATE utf8_general_ci</li>
+<li>使用testlink自带的sql脚本testlink_create_tables.sql生成表</li>
+<li>使用testlink自带的sql脚本testlink_create_default_data生成默认数据</li>
+<li>在testlink目录下新增配置文件config_DB.inc.php，内容如下：<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">define(<span class="string">'DB_TYPE'</span>, <span class="string">'mysql'</span>);</span><br><span class="line">define(<span class="string">'DB_USER'</span>, <span class="string">'yourname'</span>);</span><br><span class="line">define(<span class="string">'DB_PASS'</span>, <span class="string">'yourpassword'</span>);</span><br><span class="line">define(<span class="string">'DB_HOST'</span>, <span class="string">'databasehost:databaseport'</span>);</span><br><span class="line">define(<span class="string">'DB_NAME'</span>, <span class="string">'testlink'</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>ps：sql脚本路径 testlink/install/sql/mysql<br>方法二.根据<a href="http://localhost/testlink/install/" target="_blank" rel="noopener">http://localhost/testlink/install/</a>中的提示逐步完成<br>适用条件：首次搭建，<br>操作步骤：根据web提示添加信息即可<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg" alt="图片"></p>
+<p>配置完成后重启apache服务</p>
+<p>至此，我们已经启动了一个可随时运行的容器，并在本机运行，但是很多时候我们需要把服务部署到特定服务器上</p>
+<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><p>部署时我们只需要将本地容器制作成镜像，然后部署到对应的服务器即可</p>
+<h2 id="制作docker镜像"><a href="#制作docker镜像" class="headerlink" title="制作docker镜像"></a>制作docker镜像</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -a <span class="string">"example@example.com"</span> -m <span class="string">"基于centos的镜像搭建"</span> 2480719f8213 testlink-server/testlink:v4</span><br></pre></td></tr></table></figure>
+<h2 id="镜像推送到指定hub"><a href="#镜像推送到指定hub" class="headerlink" title="镜像推送到指定hub"></a>镜像推送到指定hub</h2><p>修改tag为规范的tag：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag SOURCE_IMAGE[:TAG] 仓库域名/仓库名/IMAGE[:TAG]</span><br></pre></td></tr></table></figure>
+<p>修改tag成功后可以使用<em>docker images</em>查看<br>push本地镜像到服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push 仓库域名/仓库名/IMAGE[:TAG]</span><br></pre></td></tr></table></figure>
+<h3 id="服务器下载镜像并启动"><a href="#服务器下载镜像并启动" class="headerlink" title="服务器下载镜像并启动"></a>服务器下载镜像并启动</h3><p>登陆要部署的服务器，下载对应镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull  仓库域名/仓库名/IMAGE[:TAG]</span><br></pre></td></tr></table></figure>
+<p>启动容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --privileged  -dit -p 8009:80 -e <span class="string">"container=docker"</span>  --name testlink_server testlink:v4   /usr/sbin/init</span><br></pre></td></tr></table></figure>
+<p>此时testlink服务器已部署完成，需要修改时执行以下命令，进入终端操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it testlink_server /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>以上</p>
+<p>参考文章<br><a href="https://blog.csdn.net/weixin_42123737/article/details/87984996" target="_blank" rel="noopener">Centos7 Docker容器中报错 Failed to get D-Bus connection: Operation not permitted</a><br><a href="https://blog.csdn.net/u011277123/article/details/77847360/" target="_blank" rel="noopener">centos7 部署Apache服务器</a><br><a href="https://www.cnblogs.com/toughlife/p/5479271.html" target="_blank" rel="noopener">在CentOS安装PHP5.6</a><br><a href="https://www.jianshu.com/p/45a36b61ad24?nomobile=yes" target="_blank" rel="noopener">testlink—安装与配置</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>投食</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/Wechat.jpeg" alt="xdthesun 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/10/%E8%AE%B0%E4%B8%80%E6%AC%A1ss%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5%E7%9A%84%E9%97%AE%E9%A2%98/" rel="next" title="记一次ss无法连接的问题">
+                <i class="fa fa-chevron-left"></i> 记一次ss无法连接的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/14/%E9%9A%8F%E7%AC%94-%E6%AF%8F%E6%97%A5%E6%9B%B4%E6%96%B0/" rel="prev" title="随笔--每日更新">
+                随笔--每日更新 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">xdthesun</p>
+              <p class="site-description motion-element" itemprop="description">欢迎来到我的小城！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xdthesun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:xdtheusun@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3272134617/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器初始化并定制"><span class="nav-number">2.</span> <span class="nav-text">容器初始化并定制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pull原生镜像"><span class="nav-number">2.1.</span> <span class="nav-text">pull原生镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行centos镜像"><span class="nav-number">2.2.</span> <span class="nav-text">运行centos镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装apache"><span class="nav-number">2.3.</span> <span class="nav-text">安装apache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装php5-6"><span class="nav-number">2.4.</span> <span class="nav-text">安装php5.6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装testlink"><span class="nav-number">2.5.</span> <span class="nav-text">安装testlink</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载testlink包"><span class="nav-number">2.5.1.</span> <span class="nav-text">下载testlink包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压testlink包并安装"><span class="nav-number">2.5.2.</span> <span class="nav-text">解压testlink包并安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置testlink"><span class="nav-number">2.6.</span> <span class="nav-text">配置testlink</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP配置"><span class="nav-number">2.6.1.</span> <span class="nav-text">PHP配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加对应目录并增加读写权限"><span class="nav-number">2.6.2.</span> <span class="nav-text">添加对应目录并增加读写权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置数据库"><span class="nav-number">2.6.3.</span> <span class="nav-text">配置数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">3.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#制作docker镜像"><span class="nav-number">3.1.</span> <span class="nav-text">制作docker镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像推送到指定hub"><span class="nav-number">3.2.</span> <span class="nav-text">镜像推送到指定hub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器下载镜像并启动"><span class="nav-number">3.2.1.</span> <span class="nav-text">服务器下载镜像并启动</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xdthesun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'gtIDxTlRFSJA4urTEzxsnJgW-gzGzoHsz',
+        appKey: 'VT645xrtCLhlCCK5duRVOc2L',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

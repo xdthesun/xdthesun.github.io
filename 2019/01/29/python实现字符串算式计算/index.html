@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,算法,字符串," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="题目计算输入的字符串算式的结果，输入为一个字符串的算式，包含小括号、+、-、*、&#x2F;以及小数点，0-9的整数，若输入的字符串是规范的算式（中缀式），则输出算式的计算结果，否则报错 示例 input: 1+((32.34+3)*4)-5output:137.36  解决思路表达式有前缀式、后缀式、中缀式，而我们一般提到的算式均为中缀式，中缀式表达式对于我们来说是很容易计算的，但是对于计算机来说，使用前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python实现字符串算式计算">
+<meta property="og:url" content="http://xdthesun.github.io/2019/01/29/python%E5%AE%9E%E7%8E%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E5%BC%8F%E8%AE%A1%E7%AE%97/index.html">
+<meta property="og:site_name" content="xdthesun">
+<meta property="og:description" content="题目计算输入的字符串算式的结果，输入为一个字符串的算式，包含小括号、+、-、*、&#x2F;以及小数点，0-9的整数，若输入的字符串是规范的算式（中缀式），则输出算式的计算结果，否则报错 示例 input: 1+((32.34+3)*4)-5output:137.36  解决思路表达式有前缀式、后缀式、中缀式，而我们一般提到的算式均为中缀式，中缀式表达式对于我们来说是很容易计算的，但是对于计算机来说，使用前">
+<meta property="article:published_time" content="2019-01-29T12:59:42.000Z">
+<meta property="article:modified_time" content="2019-12-27T10:56:31.049Z">
+<meta property="article:author" content="xdthesun">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="字符串">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xdthesun.github.io/2019/01/29/python实现字符串算式计算/"/>
+
+
+
+
+
+  <title>python实现字符串算式计算 | xdthesun</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xdthesun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xdthesun.github.io/2019/01/29/python%E5%AE%9E%E7%8E%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E5%BC%8F%E8%AE%A1%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xdthesun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdthesun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python实现字符串算式计算</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-29T20:59:42+08:00">
+                2019-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/29/python%E5%AE%9E%E7%8E%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E5%BC%8F%E8%AE%A1%E7%AE%97/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/29/python%E5%AE%9E%E7%8E%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E5%BC%8F%E8%AE%A1%E7%AE%97/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>计算输入的字符串算式的结果，输入为一个字符串的算式，包含小括号、+、-、*、/以及小数点，0-9的整数，若输入的字符串是规范的算式（中缀式），则输出算式的计算结果，否则报错</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><blockquote>
+<p>input: 1+((32.34+3)*4)-5<br>output:137.36</p>
+</blockquote>
+<h1 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h1><p>表达式有前缀式、后缀式、中缀式，而我们一般提到的算式均为中缀式，中缀式表达式对于我们来说是很容易计算的，但是对于计算机来说，使用前缀式或者后缀式来计算是更加方便的，所以我们解决的完整思路如下：</p>
+<ol>
+<li>判断算式是否符合规范的中缀式表达式</li>
+<li>将中缀式转为前缀式或者后缀式</li>
+<li>根据前缀式或者后缀式计算最终结果<h2 id="判断算式"><a href="#判断算式" class="headerlink" title="判断算式"></a>判断算式</h2><h3 id="括号匹配"><a href="#括号匹配" class="headerlink" title="括号匹配"></a>括号匹配</h3>字符串算式中包含括号，所以需要判断括号是否匹配，判断括号匹配的步骤如下：<blockquote>
+<ol>
+<li>初始化一个栈S，从左到右开始遍历字符串strs；</li>
+<li>遇到左括号直接入栈S；</li>
+<li>遇到右括号时：</li>
+<li><ol>
+<li>若栈为空，则括号不匹配，则停止遍历；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>若栈顶元素是左括号，则栈顶元素出栈，继续扫描下一个；</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>若栈顶元素为右括号，则括号不匹配，则停止遍历；</li>
+</ol>
+</li>
+<li>遇到数字或者运算符以及小数点时，不入栈</li>
+<li>反复执行2-4，直到扫描完整个字符串</li>
+<li>判断栈S是否为空，若栈为空，则表示括号匹配，否则括号不匹配</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>python代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isFormula</span><span class="params">(self, str)</span>:</span></span><br><span class="line">    temp = []</span><br><span class="line">    <span class="comment"># 去除字符串中的空格</span></span><br><span class="line">    strs = str.replace(<span class="string">' '</span>, <span class="string">''</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> strs:</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">is</span> <span class="string">'('</span>:</span><br><span class="line">            temp.append(i)</span><br><span class="line">        <span class="keyword">elif</span> i <span class="keyword">is</span> <span class="string">')'</span>:</span><br><span class="line">            <span class="keyword">if</span> len(temp) == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">elif</span> temp[<span class="number">-1</span>] <span class="keyword">is</span> <span class="string">'('</span>:</span><br><span class="line">                temp.pop()</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp.append(i)</span><br><span class="line">    res = re.match(pattern, strs)</span><br><span class="line">    <span class="keyword">if</span> len(temp) == <span class="number">0</span> :</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="算式的匹配"><a href="#算式的匹配" class="headerlink" title="算式的匹配"></a>算式的匹配</h3><p>目前想到最快的方式是利用正则表达式，简单分析下所有算式的共性：</p>
+<blockquote>
+<ol>
+<li>以括号或者数字开头</li>
+<li>以括号或者数字结尾</li>
+<li>中间有1个运算符或者n个（运算符+数字）的表达式组成</li>
+<li>每个数字前均有一个或者n个括号</li>
+<li>每个数字中可能有一个（小数点+数字）组成分数 </li>
+</ol>
+</blockquote>
+<p>根据以上规则，得到的正则表达式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pattern = <span class="string">r'^\(*\d+(\.\d+)?((\+|\*|/|-)\(*\d+(\.\d+)?\)*)*(\+|\*|/|-)\d+(\.\d+)?\)*$'</span></span><br></pre></td></tr></table></figure>
+<p>PS：当然，括号匹配也应该可以加到正则表达式中，但是我并没有找到，如果有读者想到的话，可以留言交流<br>所以判断算式是否匹配的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pattern = <span class="string">r'^\(*\d+(\.\d+)?((\+|\*|/|-)\(*\d+(\.\d+)?\)*)*(\+|\*|/|-)\d+(\.\d+)?\)*$'</span></span><br><span class="line">res = re.match(pattern, strs)</span><br><span class="line"><span class="comment"># match是从头开始匹配，这里需要完全匹配，所以如果匹配成功的话，应该是endpos等于字符串长度</span></span><br><span class="line"><span class="keyword">if</span> res.endpos == len(strs): </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>再结合括号匹配的结果，则可以得到算式是否符合规范</p>
+<h2 id="中缀式转前缀式"><a href="#中缀式转前缀式" class="headerlink" title="中缀式转前缀式"></a>中缀式转前缀式</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>前缀式又称为逆波兰式，前缀式的表达式位于操作数之前，如下：</p>
+<blockquote>
+<p>‘+’, 1, ‘-‘, ‘*’, ‘+’, 32.34, 3, 4, 5</p>
+</blockquote>
+<h3 id="前缀式表达式求值"><a href="#前缀式表达式求值" class="headerlink" title="前缀式表达式求值"></a>前缀式表达式求值</h3><p>前缀式求值过程如下：</p>
+<blockquote>
+<ol>
+<li>从右至左扫描算式</li>
+<li>遇到数字时，将数字压入堆栈，</li>
+<li>遇到运算符时，弹出栈顶的两个数，用运算符对它们做相应的计算（栈顶元素在前，次顶元素在后），并将计算结果入栈；</li>
+<li>重复上述过程直到表达式最左端，最后运算得出的值即为表达式的结果。</li>
+</ol>
+</blockquote>
+<h3 id="中缀式转前缀式-1"><a href="#中缀式转前缀式-1" class="headerlink" title="中缀式转前缀式"></a>中缀式转前缀式</h3><blockquote>
+<ol>
+<li>初始化两个栈:运算符栈s1，储存中间结果的栈s2，记录连续数个数的inflag=0，以及记录是否出现过小数的decimalflag=0</li>
+<li>从右至左扫描中缀表达式</li>
+<li>遇到操作数时，<br>3.1.若intflag和decimalflag均为0时，则直接入栈，intflag++<br>3.2.若intflag=0，decimalflag=1，则s2出栈后加上当前操作数后再入栈<br>3.3.若intflag&gt;0,则s2出栈后加上当前数字左移intflag位的值（即当前数乘以10的intflag次方）</li>
+<li>遇到运算符时，比较其与s1栈顶运算符的优先级，intflag和decimalflag置为0<br>4.1.如果s1为空，或栈顶运算符为右括号“)”，则直接将此运算符入栈<br>4.2.否则，若优先级比栈顶运算符的较高或相等，也将运算符压入s1<br>4.3.否则，将s1栈顶的运算符弹出并压入到s2中，再次转到(4-1)与s1中新的栈顶运算符相比较</li>
+<li>遇到括号时<br>5.1.如果是右括号“)”，则直接压入s1<br>5.2.如果是左括号“(”，则依次弹出S1栈顶的运算符，并压入S2，直到遇到右括号为止，此时将这一对括号丢弃</li>
+<li>遇到小数点时，将decimalflag置为1，并将当前栈顶的数字右移intflag位后入栈</li>
+<li>重复步骤2至5，直到表达式的最左边</li>
+<li>将s1中剩余的运算符依次弹出并压入s2</li>
+<li>依次弹出s2中的元素并输出，结果即为中缀表达式对应的前缀表达式</li>
+</ol>
+</blockquote>
+<h2 id="中缀式转后缀式"><a href="#中缀式转后缀式" class="headerlink" title="中缀式转后缀式"></a>中缀式转后缀式</h2><h3 id="后缀式求值"><a href="#后缀式求值" class="headerlink" title="后缀式求值"></a>后缀式求值</h3><blockquote>
+<ol>
+<li>从左向右扫描算式</li>
+<li>遇到数字时，将数字压入堆栈，</li>
+<li>遇到运算符时，弹出栈顶的两个数，用运算符对它们做相应的计算（栈顶元素在后，次顶元素在前），并将计算结果入栈；</li>
+<li>重复上述过程直到表达式最左端，最后运算得出的值即为表达式的结果。</li>
+</ol>
+</blockquote>
+<h3 id="中缀式转后缀式-1"><a href="#中缀式转后缀式-1" class="headerlink" title="中缀式转后缀式"></a>中缀式转后缀式</h3><blockquote>
+<ol>
+<li>初始化两个栈：运算符栈s1和储存中间结果的栈s2，记录连续数个数的inflag=0，以及记录是否出现过小数的decimalflag=0</li>
+<li>从左至右扫描中缀表达式；</li>
+<li>遇到操作数时，<br>3.1.若intflag和decimalflag均为0时，则直接入栈s2，intflag++<br>3.2.若intflag=0，则将当前数入栈<br>3.3.若intflag&gt;0并且decimalflag=0，则将s2栈顶元素左移一位加上当前数后入栈<br>3.4.若intflag&gt;0并且decimalflag=1，则将s2栈顶元素出栈后加上当前数右移intflag位后入栈</li>
+<li>遇到运算符时，比较其与s1栈顶运算符的优先级：<br>4.1如果s1为空，或栈顶运算符为左括号“(”，则直接将此运算符入栈；<br>4.2否则，若优先级比栈顶运算符的高，也将运算符压入s1（注意转换为前缀表达式时是优先级较高或相同，而这里则不包括相同的情况）；<br>4.3否则，将s1栈顶的运算符弹出并压入到s2中，再次转到(4-1)与s1中新的栈顶运算符相比较；</li>
+<li>遇到括号时：<br>5.1如果是左括号“(”，则直接压入s1；<br>5.2如果是右括号“)”，则依次弹出s1栈顶的运算符，并压入s2，直到遇到左括号为止，此时将这一对括号丢弃；<br>5.3重复步骤2至5，直到表达式的最右边；</li>
+<li>遇到小数点时，记录decimalflag=1；</li>
+<li>将s1中剩余的运算符依次弹出并压入s2；</li>
+<li>依次弹出s2中的元素并输出，结果的逆序即为中缀表达式对应的后缀表达式</li>
+</ol>
+</blockquote>
+<h2 id="python实现"><a href="#python实现" class="headerlink" title="python实现"></a>python实现</h2><h3 id="中缀式转前缀式-2"><a href="#中缀式转前缀式-2" class="headerlink" title="中缀式转前缀式"></a>中缀式转前缀式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Infix2Prefix</span><span class="params">(self, infixstrs)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param strs: 中缀式算式</span></span><br><span class="line"><span class="string">    :return: 转换后的前缀式</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    infixstrs = infixstrs.replace(<span class="string">' '</span>,<span class="string">''</span>)</span><br><span class="line">    stack1 = []</span><br><span class="line">    stack2 = []</span><br><span class="line">    <span class="keyword">if</span> self.isFormula(infixstrs) <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">"请输入正确格式的算式！！！"</span>)</span><br><span class="line">    infixstrs = infixstrs.replace(<span class="string">' '</span>, <span class="string">''</span>)</span><br><span class="line">    intflag = <span class="number">0</span></span><br><span class="line">    decimalflag = <span class="number">0</span></span><br><span class="line">    strs = infixstrs[::<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> strs:</span><br><span class="line">        <span class="keyword">if</span> i.isdigit() <span class="keyword">or</span> self.Operator[i] == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> i.isdigit() <span class="keyword">is</span> <span class="literal">False</span> <span class="keyword">and</span> self.Operator[i] == <span class="number">0</span>:</span><br><span class="line">                decpart = stack2.pop()</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(intflag):</span><br><span class="line">                   decpart = decpart/<span class="number">10</span></span><br><span class="line">                stack2.append(decpart)</span><br><span class="line">                decimalflag = <span class="number">1</span></span><br><span class="line">                intflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> intflag == <span class="number">0</span> <span class="keyword">and</span> decimalflag == <span class="number">0</span>:</span><br><span class="line">                    stack2.append(int(i))</span><br><span class="line">                <span class="keyword">elif</span> intflag == <span class="number">0</span> <span class="keyword">and</span> decimalflag == <span class="number">1</span>:</span><br><span class="line">                    stack2.append(stack2.pop() + int(i))</span><br><span class="line">                <span class="keyword">elif</span> intflag &gt; <span class="number">0</span> :</span><br><span class="line">                    dec = <span class="number">1</span></span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(intflag):</span><br><span class="line">                        dec = <span class="number">10</span> * dec</span><br><span class="line">                    stack2.append(stack2.pop() + int(i) * dec)</span><br><span class="line">                intflag = intflag + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            intflag = <span class="number">0</span></span><br><span class="line">            decimalflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> len(stack1) == <span class="number">0</span>  <span class="keyword">or</span> self.Operator[i] == <span class="number">3</span>:</span><br><span class="line">                stack1.append(i)</span><br><span class="line">            <span class="keyword">elif</span> self.Operator[i] == <span class="number">4</span>:</span><br><span class="line">                length = len(stack1)</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(length):</span><br><span class="line">                    temp = stack1.pop()</span><br><span class="line">                    <span class="keyword">if</span> self.Operator[temp] == <span class="number">3</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    stack2.append(temp)</span><br><span class="line">            <span class="keyword">elif</span> self.Operator[i] == <span class="number">1</span> <span class="keyword">or</span> self.Operator[i] == <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">if</span> self.Operator[stack1[<span class="number">-1</span>]] == <span class="number">3</span>:</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">                <span class="keyword">elif</span> self.Operator[stack1[<span class="number">-1</span>]] &lt;= self.Operator[i] :</span><br><span class="line">                    length = len(stack1)</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(length):</span><br><span class="line">                        <span class="keyword">if</span> len(stack1) == <span class="number">0</span> <span class="keyword">or</span> self.Operator[stack1[<span class="number">-1</span>]] &gt; self.Operator[i]:</span><br><span class="line">                            <span class="keyword">break</span></span><br><span class="line">                        temp = stack1.pop()</span><br><span class="line">                        stack2.append(temp)</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">    <span class="keyword">while</span> len(stack1)&gt;<span class="number">0</span>:</span><br><span class="line">        stack2.append(stack1.pop())</span><br><span class="line">    result = stack2</span><br><span class="line">    result.reverse()</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<h3 id="中缀式转后缀式-2"><a href="#中缀式转后缀式-2" class="headerlink" title="中缀式转后缀式"></a>中缀式转后缀式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Infix2Suffix</span><span class="params">(self, infixstrs)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param infixstrs: 中缀式算式</span></span><br><span class="line"><span class="string">    :return: 转换后的后缀式</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    infixstrs = infixstrs.replace(<span class="string">' '</span>, <span class="string">''</span>)</span><br><span class="line">    stack1 = []</span><br><span class="line">    stack2 = []</span><br><span class="line">    <span class="keyword">if</span> self.isFormula(infixstrs) <span class="keyword">is</span> <span class="literal">False</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">"请输入正确格式的算式！！！"</span>)</span><br><span class="line">    <span class="comment"># 用来标识是否是连续的数字或者小数点</span></span><br><span class="line">    intflag = <span class="number">0</span></span><br><span class="line">    decimalflag = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> infixstrs:</span><br><span class="line">        <span class="keyword">if</span> i.isdigit() <span class="keyword">or</span> self.Operator[i] == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> i.isdigit() <span class="keyword">is</span> <span class="literal">False</span> <span class="keyword">and</span> self.Operator[i] == <span class="number">0</span>:</span><br><span class="line">                intflag = <span class="number">0</span></span><br><span class="line">                decimalflag = <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> intflag == <span class="number">0</span>:</span><br><span class="line">                stack2.append(int(i))</span><br><span class="line">            <span class="keyword">elif</span> decimalflag == <span class="number">0</span> <span class="keyword">and</span> intflag &gt; <span class="number">0</span>:</span><br><span class="line">                stack2.append(stack2.pop()*<span class="number">10</span> + int(i))</span><br><span class="line">            <span class="keyword">elif</span> decimalflag == <span class="number">1</span> <span class="keyword">and</span> intflag &gt; <span class="number">0</span>:</span><br><span class="line">                prepart = stack2.pop()</span><br><span class="line">                endpart = int(i)</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(intflag):</span><br><span class="line">                    endpart = endpart/<span class="number">10</span></span><br><span class="line">                stack2.append(prepart + endpart)</span><br><span class="line">            intflag = intflag + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            intflag = <span class="number">0</span></span><br><span class="line">            decimalflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> len(stack1) == <span class="number">0</span> <span class="keyword">or</span> self.Operator[i] == <span class="number">4</span>:</span><br><span class="line">                stack1.append(i)</span><br><span class="line">            <span class="keyword">elif</span> self.Operator[i] == <span class="number">3</span>:</span><br><span class="line">                length = len(stack1)</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(length):</span><br><span class="line">                    temp = stack1.pop()</span><br><span class="line">                    <span class="keyword">if</span> self.Operator[temp] == <span class="number">4</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    stack2.append(temp)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> self.Operator[i] == <span class="number">1</span> <span class="keyword">or</span> self.Operator[i] == <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">if</span> self.Operator[stack1[<span class="number">-1</span>]] == <span class="number">4</span>:</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">                <span class="keyword">elif</span> self.Operator[stack1[<span class="number">-1</span>]] &gt;= self.Operator[i]:</span><br><span class="line">                    length = len(stack1)</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(length):</span><br><span class="line">                        <span class="keyword">if</span> len(stack1) == <span class="number">0</span> <span class="keyword">or</span> self.Operator[stack1[<span class="number">-1</span>]] &lt; self.Operator[i]:</span><br><span class="line">                            <span class="keyword">break</span></span><br><span class="line">                        temp = stack1.pop()</span><br><span class="line">                        stack2.append(temp)</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    stack1.append(i)</span><br><span class="line">    <span class="keyword">while</span> len(stack1)&gt;<span class="number">0</span>:</span><br><span class="line">        stack2.append(stack1.pop())</span><br><span class="line">    result = stack2</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<h3 id="算式的计算"><a href="#算式的计算" class="headerlink" title="算式的计算"></a>算式的计算</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(self, strs, is_Prefix=True)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        根据转换后的式子计算最终的结果</span></span><br><span class="line"><span class="string">    :param strs:</span></span><br><span class="line"><span class="string">    :param is_Suffix: 是否是后缀式</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">if</span> is_Prefix:</span><br><span class="line">        strs = strs[::<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> strs :</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> self.Operator.keys():</span><br><span class="line">            operandA = result.pop()</span><br><span class="line">            operandB = result.pop()</span><br><span class="line">            <span class="keyword">if</span> is_Prefix:</span><br><span class="line">                calres = self.operate(operandA, operandB, i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                calres = self.operate(operandB, operandA, i)</span><br><span class="line">            result.append(calres)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(i)</span><br><span class="line">    <span class="keyword">return</span> result[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/xdthesun/Calculator.git" target="_blank" rel="noopener">源码</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>投食</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/Wechat.jpeg" alt="xdthesun 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          
+            <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/10/%E3%80%90%E8%BD%AC%E3%80%91Python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6doctest/" rel="next" title="【转】Python测试框架doctest">
+                <i class="fa fa-chevron-left"></i> 【转】Python测试框架doctest
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/24/python%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F/" rel="prev" title="python中的时间与日期">
+                python中的时间与日期 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">xdthesun</p>
+              <p class="site-description motion-element" itemprop="description">欢迎来到我的小城！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xdthesun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:xdtheusun@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3272134617/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">1.0.1.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决思路"><span class="nav-number">2.</span> <span class="nav-text">解决思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#判断算式"><span class="nav-number">2.1.</span> <span class="nav-text">判断算式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#括号匹配"><span class="nav-number">2.1.1.</span> <span class="nav-text">括号匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算式的匹配"><span class="nav-number">2.1.2.</span> <span class="nav-text">算式的匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中缀式转前缀式"><span class="nav-number">2.2.</span> <span class="nav-text">中缀式转前缀式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">2.2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前缀式表达式求值"><span class="nav-number">2.2.2.</span> <span class="nav-text">前缀式表达式求值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中缀式转前缀式-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">中缀式转前缀式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中缀式转后缀式"><span class="nav-number">2.3.</span> <span class="nav-text">中缀式转后缀式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后缀式求值"><span class="nav-number">2.3.1.</span> <span class="nav-text">后缀式求值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中缀式转后缀式-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">中缀式转后缀式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python实现"><span class="nav-number">2.4.</span> <span class="nav-text">python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#中缀式转前缀式-2"><span class="nav-number">2.4.1.</span> <span class="nav-text">中缀式转前缀式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中缀式转后缀式-2"><span class="nav-number">2.4.2.</span> <span class="nav-text">中缀式转后缀式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算式的计算"><span class="nav-number">2.4.3.</span> <span class="nav-text">算式的计算</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xdthesun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'gtIDxTlRFSJA4urTEzxsnJgW-gzGzoHsz',
+        appKey: 'VT645xrtCLhlCCK5duRVOc2L',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

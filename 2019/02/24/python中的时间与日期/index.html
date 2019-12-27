@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,time,datetime," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近在工作中用到在写入数据库数据时需要指定时间的问题，数据库中的时间格式是确定的，写入数据时也需要指定对应的时间格式，并且是str类型的，对于某些特殊数据也有加减特定天或者分钟的需求，实际使用过程中遇到很多问题，遂对python中的时间与日期相关的知识做个整理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python中的时间与日期">
+<meta property="og:url" content="http://xdthesun.github.io/2019/02/24/python%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F/index.html">
+<meta property="og:site_name" content="xdthesun">
+<meta property="og:description" content="最近在工作中用到在写入数据库数据时需要指定时间的问题，数据库中的时间格式是确定的，写入数据时也需要指定对应的时间格式，并且是str类型的，对于某些特殊数据也有加减特定天或者分钟的需求，实际使用过程中遇到很多问题，遂对python中的时间与日期相关的知识做个整理。">
+<meta property="article:published_time" content="2019-02-24T01:08:45.000Z">
+<meta property="article:modified_time" content="2019-12-27T10:56:31.044Z">
+<meta property="article:author" content="xdthesun">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="time">
+<meta property="article:tag" content="datetime">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xdthesun.github.io/2019/02/24/python中的时间与日期/"/>
+
+
+
+
+
+  <title>python中的时间与日期 | xdthesun</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xdthesun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xdthesun.github.io/2019/02/24/python%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xdthesun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdthesun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python中的时间与日期</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-24T09:08:45+08:00">
+                2019-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/24/python%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/24/python%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在工作中用到在写入数据库数据时需要指定时间的问题，数据库中的时间格式是确定的，写入数据时也需要指定对应的时间格式，并且是str类型的，对于某些特殊数据也有加减特定天或者分钟的需求，实际使用过程中遇到很多问题，遂对python中的时间与日期相关的知识做个整理。</p>
+<a id="more"></a>
+<h1 id="基本库"><a href="#基本库" class="headerlink" title="基本库"></a>基本库</h1><p>python中常用的两个时间库分别为time和datetime，time提供操作各种时间的函数和常量，datetime是一个使用面向对象编程设计的模块，它定义了几个表示日期和时间的类 </p>
+<h2 id="time库"><a href="#time库" class="headerlink" title="time库"></a>time库</h2><h3 id="时间元组"><a href="#时间元组" class="headerlink" title="时间元组"></a>时间元组</h3><p>Python时间函数将时间处理为9个数字的元组，各个索引所代表的字段及取值范围如下所示：<br>| 索引   | 字段   | 含义   | 值范围   |<br>|:—-|:—-|:—-|:—-|<br>| 0   | tm_year   | 4位数，表示年份   | 2018，2019…   |<br>| 1   | tm_mon   | 月份   | [1-12]   |<br>| 2   | tm_mday   | 日期   | [1-31]   |<br>| 3   | tm_hour   | 小时   | [0-23]   |<br>| 4   | tm_min   | 分钟   | [0-59]   |<br>| 5   | tm_sec   | 秒   | [0-60]   |<br>| 6   | tm_wday   | 星期几   | [0-6]   |<br>| 7   | tm_yday   | 一年的第几天   | [1-366]   |<br>| 8   | tm_isdst   | 夏令时   | 1，0，1，-1是决定是否为夏令时的flag   | </p>
+<p>获取时间元组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;time.localtime()</span><br><span class="line">time.struct_time(tm_year=2019, tm_mon=2, tm_mday=23, tm_hour=8, tm_min=35, tm_sec=33, tm_wday=5, tm_yday=54, tm_isdst=0)</span><br></pre></td></tr></table></figure>
+<h3 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h3><p>时间戳表示的是从1970年1月１日开始按秒计算的偏移量(time.gmtime(0))此模块中的函数无法处理1970纪元年以前的时间或太遥远的未来(处理极限取决于C函数库，对于32位系统而言，是2038年)<br>获取当前时间戳</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;time.time()</span><br><span class="line">1550882299.8993332</span><br></pre></td></tr></table></figure>
+<h3 id="时间格式化符号"><a href="#时间格式化符号" class="headerlink" title="时间格式化符号"></a>时间格式化符号</h3><table>
+<thead>
+<tr>
+<th align="left">格式化符号</th>
+<th align="left">含义</th>
+<th align="left">范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">%y</td>
+<td align="left">两位数的年份表示</td>
+<td align="left">[0-99]</td>
+</tr>
+<tr>
+<td align="left">%Y</td>
+<td align="left">四位数的年份</td>
+<td align="left">[000-9999]</td>
+</tr>
+<tr>
+<td align="left">%m</td>
+<td align="left">月份</td>
+<td align="left">[01-12]</td>
+</tr>
+<tr>
+<td align="left">%d</td>
+<td align="left">日期</td>
+<td align="left">[1-31]</td>
+</tr>
+<tr>
+<td align="left">%H</td>
+<td align="left">24小时制的小时</td>
+<td align="left">[0-23]</td>
+</tr>
+<tr>
+<td align="left">%I</td>
+<td align="left">12小时制的小时</td>
+<td align="left">[0-12]</td>
+</tr>
+<tr>
+<td align="left">%M</td>
+<td align="left">分钟数</td>
+<td align="left">[00-59]</td>
+</tr>
+<tr>
+<td align="left">%S</td>
+<td align="left">秒</td>
+<td align="left">[00-59]</td>
+</tr>
+<tr>
+<td align="left">%a</td>
+<td align="left">本地简化星期的名称</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%A</td>
+<td align="left">本地完整星期的名称</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%b</td>
+<td align="left">本地简化月份的名称</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%B</td>
+<td align="left">本地完整月份的名称</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%c</td>
+<td align="left">本地相应的日期表示和时间表示</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%j</td>
+<td align="left">年内的一天</td>
+<td align="left">[0-366]</td>
+</tr>
+<tr>
+<td align="left">%p</td>
+<td align="left">本地A.M和P.M的等价符</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%U</td>
+<td align="left">一年中的星期数，星期天开始计算</td>
+<td align="left">[0-53]</td>
+</tr>
+<tr>
+<td align="left">%u</td>
+<td align="left">星期,星期天为开始</td>
+<td align="left">[0-6]</td>
+</tr>
+<tr>
+<td align="left">%W</td>
+<td align="left">一年中的星期数，星期一开始计算</td>
+<td align="left">[0-53]</td>
+</tr>
+<tr>
+<td align="left">%x</td>
+<td align="left">本地相应的日期表示</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%X</td>
+<td align="left">本地相应的时间表示</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">%Z</td>
+<td align="left">当前时区的名称</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="常用函数和属性"><a href="#常用函数和属性" class="headerlink" title="常用函数和属性"></a>常用函数和属性</h3><ul>
+<li><strong>time.altzone</strong><br>返回格林威治西部的夏令时地区的偏移秒数，如果该地区在格林威治东部会返回负值(如西欧，包括英国)，对夏令时启用地区才能使用</li>
+<li><strong>time.asctime([t])</strong><br>接受时间元组并返回一个可读的形式”Tue May 30 17:17:30 2017”(2017年5月30日周二17时17分30秒)的24个字符的字符串</li>
+<li><strong>time.clock()</strong><br>用以浮点数计算的秒数返回当前的CPU时间，用来衡量不同程序的耗时，比time.time()更有用,python3.3以后不被推荐使用，该方法依赖操作系统，建议使用perf_counter(返回系统运行时间)或process_time(返回进程运行时间)代替</li>
+<li><strong>time.ctime([secs])</strong><br>作用相当于asctime(localtime(secs)),未给参数相当于asctime()</li>
+<li><strong>time.gmtime([secs])</strong><br>接收时间辍(1970纪元年后经过的浮点秒数)并返回格林威治天文时间下的时间元组t(t.tm_isdst始终为０)</li>
+<li><strong>time.daylight</strong><br>如果夏令时被定义，则该值为非零</li>
+<li><strong>time.localtime([secs])</strong><br>接收时间辍(1970纪元年后经过的浮点秒数)并返回当地时间下的时间元组t(t.tm_isdst可取为０或１，取决于当地当时是不是夏令时)</li>
+<li><strong>time.mktime(t)</strong><br>接受时间元组并返回时间辍(1970纪元年后经过的浮点秒数)</li>
+<li><strong>time.perf_counter()</strong><br>返回计时器的精准时间(系统的运行时间)，包含整个系统的睡眠时间．由于返回值的基准点是未定义的，所以，只有连续调用的结果之间的差才是有效的</li>
+<li><strong>time.process_time()</strong><br>回当前进程执行CPU的时间总和，不包含睡眠时间．由于返回值的基准点是未定义的，所以只有连续调用的结果之间的差才是有效的</li>
+<li><strong>time.sleep(secs)</strong><br>迟调用线程的运行，secs的单位是秒</li>
+<li><strong>time.strftime(format[,t])</strong><br>把一个代表时间的元组或者struct_time(如由time.localtime()和time.gmtime()返回)转化为格式化的时间字符串．如果t未指定，将传入time.localtime()，如果元组中任命一个元素越界，将会抛出ValueError异常</li>
+<li><strong>time.strptime(string[,format])</strong><br>把一个格式化时间字符串转化为struct_time,实际上它和strftie()是逆操作</li>
+<li><strong>time.time()</strong><br>返回当前时间的时间戳(1970元年后的浮点秒数)</li>
+<li><strong>time.timezone()</strong><br>是当地时区(未启动夏令时)距离格林威治的偏移秒数(美洲＞０，欧洲大部分，亚洲，非洲&lt;＝０)</li>
+<li><strong>time.tzname</strong><br>包含两个字符串的元组，第一是当地夏令时区的名称，第二是当地的DST时区的名称<h2 id="datetime库"><a href="#datetime库" class="headerlink" title="datetime库"></a>datetime库</h2><h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3></li>
+<li>datetime.date：表示日期的类，可以对日期进行操作</li>
+<li>datetime.datetime：表示时间的类，可单独对时间进行操作</li>
+<li>datetime.time：表示时间的类</li>
+<li>datetime.timedelta：表示时间间隔，即两个时间点的间隔</li>
+<li>datetime.tzinfo：时区的相关信息<h3 id="常用函数和属性-1"><a href="#常用函数和属性-1" class="headerlink" title="常用函数和属性"></a>常用函数和属性</h3>datetime.date类</li>
+<li>datetime.date(year, month, day) # 初始化一个date对象<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.date(2019,12,10)</span><br><span class="line">datetime.date(2019, 12, 10)</span><br></pre></td></tr></table></figure></li>
+<li>datetime.date.today() # 以当前年、月、日 初始化一个date对象<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.date.today()</span><br><span class="line">datetime.date(2019, 2, 24)</span><br></pre></td></tr></table></figure></li>
+<li>datetime.date       strftime(format) # 格式化日期，时分秒均默认为0<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; format = <span class="string">"%Y-%m-%d %H:%M:%S"</span></span><br><span class="line">&gt;&gt;&gt; datetime.date.today().strftime(format)</span><br><span class="line"><span class="string">'2019-02-24 00:00:00'</span></span><br></pre></td></tr></table></figure></li>
+<li>datetime.date     timetuple()  # 转成时间元组格式<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.date.today().timetuple()</span><br><span class="line">time.struct_time(tm_year=2019, tm_mon=2, tm_mday=24, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=6, tm_yday=55, tm_isdst=-1)</span><br></pre></td></tr></table></figure></li>
+<li>datetime.date     replace(year=?, month=?, day=?) # 返回一个替换后的date对象<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.date.today().replace(month=1)</span><br><span class="line">datetime.date(2019, 1, 24)</span><br></pre></td></tr></table></figure></li>
+<li>datetime.date.formattimestamp() #将时间戳转化为date对象<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.date.fromtimestamp(time.time())</span><br><span class="line">datetime.date(2019, 2, 24)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>datetime.time类</p>
+<ul>
+<li>datetime.time(hour, minute, second, mircoecond) #初始化一个time对象<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.time(8,12,20,20)</span><br><span class="line">datetime.time(8, 12, 20, 20)</span><br></pre></td></tr></table></figure></li>
+<li>datetime.time   strftime()  #格式化日期，转为str，年月日默认为时间戳元年<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.time(8,12,20,20).strftime(format)</span><br><span class="line"><span class="string">'1900-01-01 08:12:20'</span></span><br></pre></td></tr></table></figure>
+datetime.datetime类所包含的方法和属性与datetime.date和datetime.time类包含的类似，用法也相似，这里就不再赘述</li>
+<li>datetime.datetime(year, month, day, hour, minute, second, mircosecond)</li>
+<li>datetime.datetime.now([tz])  #当不指定时区时，和datetime.datetime.today()是一样的结果，如下</li>
+<li>datetime.datetime.strftime(format)  #格式化为需要的时间，如常用的 “年-月-日 小时：分钟：秒” 格式</li>
+<li>datetime.datetime.timtuple()  #转成struct_time格式，这样传递给time.mktime(t)  后，直接转成时间戳格式</li>
+<li>datetime.datetime.replace(year, month, day)   #返回一个替换后的date对象</li>
+<li>datetime.datetime.fromtimestamp(timestamp)  #将时间戳转化为datetime对象</li>
+</ul>
+<p>datetime.timedelta类<br>datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)<br>主要用于计算时间间隔一定时间的时间值，比如举例今日7天前的时间为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; datetime.datetime.today()-datetime.timedelta(days=7)</span><br><span class="line">datetime.datetime(2019, 2, 17, 21, 44, 28, 282900)</span><br></pre></td></tr></table></figure>
+<h1 id="时间的转换"><a href="#时间的转换" class="headerlink" title="时间的转换"></a>时间的转换</h1><h3 id="时间戳转换为时间元组"><a href="#时间戳转换为时间元组" class="headerlink" title="时间戳转换为时间元组"></a>时间戳转换为时间元组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.localtime(timestamp)</span><br></pre></td></tr></table></figure>
+<h3 id="时间元祖转换为时间戳"><a href="#时间元祖转换为时间戳" class="headerlink" title="时间元祖转换为时间戳"></a>时间元祖转换为时间戳</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.mktime(struct_time)</span><br></pre></td></tr></table></figure>
+<h3 id="str转时间元组"><a href="#str转时间元组" class="headerlink" title="str转时间元组"></a>str转时间元组</h3><p>使用strptime(str, format)方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;format = <span class="string">"%Y-%m-%d %H:%M:%S"</span></span><br><span class="line">&gt;&gt;&gt;time.strptime(<span class="string">'2019-02-24 00:00:00'</span>, format)</span><br><span class="line">time.struct_time(tm_year=2019, tm_mon=2, tm_mday=24, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=6, tm_yday=55, tm_isdst=-1)</span><br></pre></td></tr></table></figure>
+<h3 id="时间元组转str"><a href="#时间元组转str" class="headerlink" title="时间元组转str"></a>时间元组转str</h3><p>使用strftime(format, timetuple)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;format = <span class="string">"%Y-%m-%d %H:%M:%S"</span></span><br><span class="line">&gt;&gt;&gt; time.strftime(format, time.localtime())</span><br><span class="line"><span class="string">'2019-02-24 21:54:53'</span></span><br></pre></td></tr></table></figure>
+<h3 id="时间戳转成str"><a href="#时间戳转成str" class="headerlink" title="时间戳转成str"></a>时间戳转成str</h3><p>先使用time.localtime(timestamp)将时间戳转成时间元组，再使用time.strftime(format,timetuple)转成str即可</p>
+<h3 id="str转为时间戳"><a href="#str转为时间戳" class="headerlink" title="str转为时间戳"></a>str转为时间戳</h3><p>先使用time.strptime(str,  format)将str转为时间元组，再使用time.mktime(timetuple)将时间元组转为时间戳</p>
+<h3 id="时间增加某几天或者减少某几天"><a href="#时间增加某几天或者减少某几天" class="headerlink" title="时间增加某几天或者减少某几天"></a>时间增加某几天或者减少某几天</h3><p>使用datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0),可以增加或者减少对应的天、小时、分、秒等</p>
+<h3 id="时间大小的比较"><a href="#时间大小的比较" class="headerlink" title="时间大小的比较"></a>时间大小的比较</h3><p>将时间统一转换为str或者时间戳，或者时间元组进行比较</p>
+<p>-</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>投食</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/Wechat.jpeg" alt="xdthesun 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/time/" rel="tag"># time</a>
+          
+            <a href="/tags/datetime/" rel="tag"># datetime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/29/python%E5%AE%9E%E7%8E%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="next" title="python实现字符串算式计算">
+                <i class="fa fa-chevron-left"></i> python实现字符串算式计算
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/26/git%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF%E5%B9%B6%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF%E5%A4%9A%E4%BD%99%E5%88%86%E6%94%AF/" rel="prev" title="git合并分支并删除分支多余分支">
+                git合并分支并删除分支多余分支 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">xdthesun</p>
+              <p class="site-description motion-element" itemprop="description">欢迎来到我的小城！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xdthesun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:xdtheusun@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3272134617/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本库"><span class="nav-number">1.</span> <span class="nav-text">基本库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#time库"><span class="nav-number">1.1.</span> <span class="nav-text">time库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间元组"><span class="nav-number">1.1.1.</span> <span class="nav-text">时间元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间戳"><span class="nav-number">1.1.2.</span> <span class="nav-text">时间戳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间格式化符号"><span class="nav-number">1.1.3.</span> <span class="nav-text">时间格式化符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数和属性"><span class="nav-number">1.1.4.</span> <span class="nav-text">常用函数和属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#datetime库"><span class="nav-number">1.2.</span> <span class="nav-text">datetime库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块"><span class="nav-number">1.2.1.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数和属性-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">常用函数和属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时间的转换"><span class="nav-number">2.</span> <span class="nav-text">时间的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间戳转换为时间元组"><span class="nav-number">2.0.1.</span> <span class="nav-text">时间戳转换为时间元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间元祖转换为时间戳"><span class="nav-number">2.0.2.</span> <span class="nav-text">时间元祖转换为时间戳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str转时间元组"><span class="nav-number">2.0.3.</span> <span class="nav-text">str转时间元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间元组转str"><span class="nav-number">2.0.4.</span> <span class="nav-text">时间元组转str</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间戳转成str"><span class="nav-number">2.0.5.</span> <span class="nav-text">时间戳转成str</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str转为时间戳"><span class="nav-number">2.0.6.</span> <span class="nav-text">str转为时间戳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间增加某几天或者减少某几天"><span class="nav-number">2.0.7.</span> <span class="nav-text">时间增加某几天或者减少某几天</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间大小的比较"><span class="nav-number">2.0.8.</span> <span class="nav-text">时间大小的比较</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xdthesun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'gtIDxTlRFSJA4urTEzxsnJgW-gzGzoHsz',
+        appKey: 'VT645xrtCLhlCCK5duRVOc2L',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
