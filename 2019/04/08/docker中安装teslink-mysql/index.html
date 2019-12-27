@@ -85,17 +85,17 @@
 <meta property="og:url" content="http://xdthesun.github.io/2019/04/08/docker%E4%B8%AD%E5%AE%89%E8%A3%85teslink-mysql/index.html">
 <meta property="og:site_name" content="xdthesun">
 <meta property="og:description" content="使用docker搭建一个testlink服务器，外连公司的mysql数据库，可以方便地对数据做迁移">
-<meta property="og:image" content="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg">
+<meta property="og:image" content="http://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
+<meta property="og:image" content="http://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail">
+<meta property="og:image" content="http://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg">
+<meta property="og:image" content="http://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg">
 <meta property="article:published_time" content="2019-04-07T23:30:39.000Z">
-<meta property="article:modified_time" content="2019-12-27T10:56:31.169Z">
+<meta property="article:modified_time" content="2019-12-27T13:17:50.382Z">
 <meta property="article:author" content="xdthesun">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
+<meta name="twitter:image" content="http://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail">
 
 
 
@@ -417,7 +417,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y update   <span class="comment">#更新软件</span></span><br><span class="line">yum install httpd -y    <span class="comment">#安装apache</span></span><br></pre></td></tr></table></figure>
 <p>等待以上命令安装成功后启动apache并将apach加入到开机自启动</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start httpd    <span class="comment">#启动apache服务</span></span><br><span class="line">systemctl <span class="built_in">enable</span>  httpd   <span class="comment">#设置apache开机自启动</span></span><br></pre></td></tr></table></figure>
-<p>若在使用systemctl时提示<em>Failed to get D-Bus connection: Operation not permitted</em>，请检查容器是否使用–privileged启动，详细解决方法可参考<a href="https://blog.csdn.net/weixin_42123737/article/details/87984996" target="_blank" rel="noopener">Centos7 Docker容器中报错 Failed to get D-Bus connection: Operation not permitted</a><br>此时可以打开本地浏览器<a href="http://localhost/" target="_blank" rel="noopener">http://localhost/</a> 若提示展示如下页面，则表明apache服务启动成功<br><img src="https://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail" alt="图片"></p>
+<p>若在使用systemctl时提示<em>Failed to get D-Bus connection: Operation not permitted</em>，请检查容器是否使用–privileged启动，详细解决方法可参考<a href="https://blog.csdn.net/weixin_42123737/article/details/87984996" target="_blank" rel="noopener">Centos7 Docker容器中报错 Failed to get D-Bus connection: Operation not permitted</a><br>此时可以打开本地浏览器<a href="http://localhost/" target="_blank" rel="noopener">http://localhost/</a> 若提示展示如下页面，则表明apache服务启动成功<br><img src="http://uploader.shimo.im/f/2HNsENZiIhYjGscg.png!thumbnail" alt="图片"></p>
 <h2 id="安装php5-6"><a href="#安装php5-6" class="headerlink" title="安装php5.6"></a>安装php5.6</h2><p>添加centOS 7.0源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br><span class="line">rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</span><br></pre></td></tr></table></figure>
 <p>yum源配置好后安装PHP5.6</p>
@@ -436,8 +436,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zvxf testlink-1.9.19.tar.gz testlink</span><br></pre></td></tr></table></figure>
 <p>拷贝testlink到apache服务的指定目录</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv testlink-1.9.19 /var/www/html/testlink</span><br></pre></td></tr></table></figure>
-<p>重启apache服务后访问<a href="http://localhost/testlink" target="_blank" rel="noopener">http://localhost/testlink</a> 可进入如下界面则表明apache已安装成功<br><img src="https://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail" alt="图片"></p>
-<h2 id="配置testlink"><a href="#配置testlink" class="headerlink" title="配置testlink"></a>配置testlink</h2><h3 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h3><p><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg" alt="图片"><br>php配置文件目录为</p>
+<p>重启apache服务后访问<a href="http://localhost/testlink" target="_blank" rel="noopener">http://localhost/testlink</a> 可进入如下界面则表明apache已安装成功<br><img src="http://uploader.shimo.im/f/CqppA7S7yoICaFMU.png!thumbnail" alt="图片"></p>
+<h2 id="配置testlink"><a href="#配置testlink" class="headerlink" title="配置testlink"></a>配置testlink</h2><h3 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h3><p><img src="http://ws3.sinaimg.cn/large/005BYqpggy1g22n5e8w8yj30vj0u043l.jpg" alt="图片"><br>php配置文件目录为</p>
 <blockquote>
 <p>/etc/php.ini</p>
 </blockquote>
@@ -452,7 +452,7 @@
 
 </li>
 </ol>
-<p>ps：sql脚本路径 testlink/install/sql/mysql<br>方法二.根据<a href="http://localhost/testlink/install/" target="_blank" rel="noopener">http://localhost/testlink/install/</a>中的提示逐步完成<br>适用条件：首次搭建，<br>操作步骤：根据web提示添加信息即可<br><img src="https://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg" alt="图片"></p>
+<p>ps：sql脚本路径 testlink/install/sql/mysql<br>方法二.根据<a href="http://localhost/testlink/install/" target="_blank" rel="noopener">http://localhost/testlink/install/</a>中的提示逐步完成<br>适用条件：首次搭建，<br>操作步骤：根据web提示添加信息即可<br><img src="http://ws3.sinaimg.cn/large/005BYqpggy1g22n3h7awvj30u0196tpk.jpg" alt="图片"></p>
 <p>配置完成后重启apache服务</p>
 <p>至此，我们已经启动了一个可随时运行的容器，并在本机运行，但是很多时候我们需要把服务部署到特定服务器上</p>
 <h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><p>部署时我们只需要将本地容器制作成镜像，然后部署到对应的服务器即可</p>
