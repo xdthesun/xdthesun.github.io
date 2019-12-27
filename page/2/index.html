@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -94,7 +94,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -179,7 +179,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/%20" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -189,7 +189,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -197,11 +197,65 @@
           </a>
         </li>
       
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
 
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
       
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -297,6 +351,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -323,35 +387,20 @@
       
         
           
-            <p>  最近开始接触金融相关的测试，发现在金融测试中身份证号是个很重要的数据，网上也有很多大佬自己写的身份证生成器，抱着学习的态度，花了两个晚上的时间用python写完了这个身份证号生成器</p>
-<h2 id="1-身份证编码规则"><a href="#1-身份证编码规则" class="headerlink" title="1. 身份证编码规则"></a>1. 身份证编码规则</h2><img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E8%BA%AB%E4%BB%BD%E8%AF%81%E6%A0%BC%E5%BC%8F.png" class="">
-<h4 id="1-1-身份证地址码"><a href="#1-1-身份证地址码" class="headerlink" title="1.1. 身份证地址码"></a>1.1. 身份证地址码</h4><p>共6位，表示登记户口时所在地的行政区划代码（省、市、县），如下：</p>
-<img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%9C%B0%E5%9D%80%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png" class="">
+            最近开始接触金融相关的测试，发现在金融测试中身份证号是个很重要的数据，网上也有很多大佬自己写的身份证生成器，抱着学习的态度，花了两个晚上的时间用python写完了这个身份证号生成器
+1. 身份证编码规则
+1.1. 身份证地址码共6位，表示登记户口时所在地的行政区划代码（省、市、县），如下：
 
 
-<h4 id="1-2-出生年月日"><a href="#1-2-出生年月日" class="headerlink" title="1.2. 出生年月日"></a>1.2. 出生年月日</h4><p>共8位，表示该居民的出生年月日，年4位数字，月和日分别用2位数字表示，如19930211</p>
-<h4 id="1-3-顺序码"><a href="#1-3-顺序码" class="headerlink" title="1.3. 顺序码"></a>1.3. 顺序码</h4><p>共3位，同一区域内同年同月同日生的人的顺序顺延，男生占偶数，女生占奇数，不足三位自动在前面补0，如某地区出生的第一位男生，则顺序码为002</p>
-<h4 id="1-4-校验码"><a href="#1-4-校验码" class="headerlink" title="1.4. 校验码"></a>1.4. 校验码</h4><p>共1位，校验码前面17位为本体位，校验码根据本体位计算得到<br>    1.4.1. 本体位每位和对应的加权因子相乘并求和得sum<br>    1.4.2. sum对11取余<br>    1.4.3. 根据余数和校验码对应表得到最后的校验码值</p>
-<h4 id="附："><a href="#附：" class="headerlink" title="附："></a>附：</h4> <img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%8A%A0%E6%9D%83%E5%9B%A0%E5%AD%90%E8%A1%A8.png" class="">
- <img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E6%A0%A1%E9%AA%8C%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png" class="">
 
-<p>举例：44180020130412122(不包含校验码)</p>
-<blockquote>
-<ol>
-<li>sum = 4x7 + 4x9 + 1x10 + 8x5 + 0x8 + 0x4 + 2x2 + 0x1 + 1x6 + 3x3 + 0x7 + 4x9 + 1x10 + 2x5 + 1x8 + 2x4 +2x2 = 209   </li>
-<li>对11取余得0</li>
-<li>根据余数和校验码表得到对应值为1</li>
-</ol>
-</blockquote>
-<p>tips：最后一位也可以根据m=12-sum%11得到，若x为10，则最后一位为X，否则为计算得到的m</p>
-<h2 id="2-python编码"><a href="#2-python编码" class="headerlink" title="2. python编码"></a>2. python编码</h2><h4 id="2-1-身份证地址码生成"><a href="#2-1-身份证地址码生成" class="headerlink" title="2.1. 身份证地址码生成"></a>2.1. 身份证地址码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getAddressNum</span><span class="params">(self, useRandom=True)</span>:</span></span><br><span class="line">        <span class="comment"># 存储地址和地址码之间的对应</span></span><br><span class="line">        addressToNumber = json.load(open(<span class="string">"function/json/addresstonumber.json"</span>, encoding=<span class="string">"utf-8"</span>))</span><br><span class="line">        <span class="comment"># 随机生成一个地址码</span></span><br><span class="line">        <span class="keyword">if</span> useRandom:</span><br><span class="line">            print(<span class="string">"随机生成一个地址码....."</span>)</span><br><span class="line">            tempAddress = random.sample(list(addressToNumber.keys()), <span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">            self.addressNum = addressToNumber[tempAddress]</span><br><span class="line">            <span class="keyword">return</span> self.addressNum, tempAddress</span><br><span class="line">        <span class="comment"># 根据用户提供的信息</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            address = input(<span class="string">"请输入省份或城市：\n"</span>)</span><br><span class="line">            tempList = []</span><br><span class="line">            <span class="keyword">if</span> len(address) == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> self.getAddressNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> addressToNumber.keys():</span><br><span class="line">                <span class="keyword">if</span> address <span class="keyword">in</span> x:</span><br><span class="line">                    tempList.append(x)</span><br><span class="line">            <span class="keyword">if</span> len(tempList) == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"输入的省份或城市未找打，请确认！"</span>)</span><br><span class="line">                <span class="keyword">return</span> self.getAddressNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">            print(<span class="string">"请选择对应的城市:"</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(tempList)):</span><br><span class="line">                print(str(i) + <span class="string">"."</span> + tempList[i])</span><br><span class="line">            num = input(<span class="string">"请输入对应城市编号（默认则为随机选择以下任意一个城市）:"</span>)</span><br><span class="line">            <span class="keyword">if</span> len(num) == <span class="number">0</span>:</span><br><span class="line">                num = random.randint(<span class="number">0</span>, len(tempList))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                num = int(num)</span><br><span class="line">            tempNumber = addressToNumber[tempList[num]]</span><br><span class="line">            self.addressNum = tempNumber</span><br><span class="line">            <span class="keyword">return</span> tempNumber, tempList[int(num)]</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-出生年月生成"><a href="#2-2-出生年月生成" class="headerlink" title="2.2. 出生年月生成"></a>2.2. 出生年月生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getBirthdayNum</span><span class="params">(self, useRandom=True)</span>:</span></span><br><span class="line">        <span class="comment"># 随机生成一个年月日</span></span><br><span class="line">        <span class="keyword">if</span> useRandom:</span><br><span class="line">            print(<span class="string">"随机生成一个出生日期......"</span>)</span><br><span class="line">            startTime = int(time.mktime((<span class="number">1984</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)))</span><br><span class="line">            endTime = int(time.time())</span><br><span class="line">            x = random.randrange(startTime, endTime)</span><br><span class="line">            date_touple = time.localtime(x)</span><br><span class="line">            date = time.strftime(<span class="string">"%Y%m%d"</span>, date_touple)</span><br><span class="line">            self.birthdayNum = date</span><br><span class="line">            <span class="keyword">return</span> date</span><br><span class="line">        <span class="comment"># 根据用户提供的信息</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            birthday = input(<span class="string">"请输8位生日（格式xxxxxxxx，如19930405）："</span>)</span><br><span class="line">            <span class="keyword">if</span> len(birthday) == <span class="number">0</span>:</span><br><span class="line">                self.birthdayNum = self.getBirthdayNum()</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br><span class="line">            <span class="keyword">elif</span> len(birthday) != <span class="number">8</span>:</span><br><span class="line">                print(<span class="string">"输入有误！"</span>)</span><br><span class="line">                self.birthdayNum = self.getBirthdayNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.birthdayNum = birthday</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br></pre></td></tr></table></figure>
-<h4 id="2-3-顺序码生成"><a href="#2-3-顺序码生成" class="headerlink" title="2.3. 顺序码生成"></a>2.3. 顺序码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getOrder</span><span class="params">(self)</span>:</span></span><br><span class="line">        temp = random.randint(<span class="number">0</span>, <span class="number">999</span>)</span><br><span class="line">        <span class="keyword">if</span> temp &lt; <span class="number">10</span>:</span><br><span class="line">            self.orderNum = <span class="string">'00'</span> + str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br><span class="line">        <span class="keyword">elif</span> temp &lt; <span class="number">100</span>:</span><br><span class="line">            self.orderNum = <span class="string">'0'</span> + str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.orderNum = str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br></pre></td></tr></table></figure>
-<h4 id="2-4-校验码生成"><a href="#2-4-校验码生成" class="headerlink" title="2.4. 校验码生成"></a>2.4. 校验码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLastCode</span><span class="params">(self, top17=<span class="string">''</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 加权因子</span></span><br><span class="line">        factorNumber = [<span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>]</span><br><span class="line">        <span class="keyword">if</span> len(top17) == <span class="number">0</span>:</span><br><span class="line">            temp = self.addressNum + self.birthdayNum + self.orderNum</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            temp = top17</span><br><span class="line">        lastcodetemp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, j <span class="keyword">in</span> zip(factorNumber, temp):</span><br><span class="line">            lastcodetemp = lastcodetemp + i * int(j)</span><br><span class="line">        lastcodetemp = <span class="number">12</span> - lastcodetemp</span><br><span class="line">        lastcode = <span class="string">'X'</span> <span class="keyword">if</span> lastcodetemp % <span class="number">11</span> == <span class="number">10</span> <span class="keyword">else</span> lastcodetemp % <span class="number">11</span></span><br><span class="line">        self.lastCode = str(lastcode)</span><br><span class="line">        <span class="keyword">return</span> lastcode</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://github.com/xdthesun/GetInfomation/blob/master/function/IDNumber.py" target="_blank" rel="noopener">完整代码</a></p>
-
-          
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -465,6 +514,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/07/%E6%95%B0%E7%BB%84%E6%8B%86%E5%88%86I/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/05/07/%E6%95%B0%E7%BB%84%E6%8B%86%E5%88%86I/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -491,29 +550,18 @@
       
         
           
-            <h3 id="源题目"><a href="#源题目" class="headerlink" title="源题目"></a>源题目</h3><p>给定长度为 2n 的数组, 你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), …, (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大。<br>示例 1:</p>
-<blockquote>
-<p> 输入: [1,4,3,2]</p>
-<p>输出: 4<br>解释: n 等于 2, 最大总和为 4 = min(1, 2) + min(3, 4).</p>
-</blockquote>
-<p>提示:</p>
-<blockquote>
-<p> n 是正整数,范围在 [1, 10000].<br>数组中的元素范围在 [-10000, 10000].</p>
-</blockquote>
-<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>求每对数中最小值之和为最大，则只需要在分割成不同对时，尽量让每对中最小值对最大值的影响最小，比如：</p>
-<blockquote>
-<p> 数组： [1,4,3,2]</p>
-</blockquote>
-<p>成对分隔，按照（1,2），（3,4）的方式分隔，每次求最小值时得到的值是较大的，这样总和也就是最大的<br>由上分析可得，先将数组排序，排序后在依次取相邻两个数的最小值求和，则得到所需结果。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>1）使用Java排序算法:leetcode可通过</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;  </span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">arrayPairSum</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">           Arrays.sort(nums);</span><br><span class="line">           <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; nums.length; i=i+<span class="number">2</span>)&#123;</span><br><span class="line">           result = result + nums[i];</span><br><span class="line">           &#125;</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">       &#125; </span><br><span class="line">   &#125; </span><br></pre></td></tr></table></figure>
+          源题目给定长度为 2n 的数组, 你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), …, (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大。示例 1:
 
-<p>2）冒泡排序：leetcode提示超时</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">arrayPairSum2</span><span class="params">(<span class="keyword">int</span>[] nums)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//自己写排序算法</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length-<span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; nums.length ; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[i]&gt;nums[j])&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp = nums[i];</span><br><span class="line">                    nums[i] = nums[j];</span><br><span class="line">                    nums[j] = temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length ;i = i+<span class="number">2</span>)&#123;</span><br><span class="line">            result += nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://gitee.com/xdthesun/LeetCode.git" target="_blank" rel="noopener">完整源码</a> </p>
-
-          
+ 输入: [1,4,3,2]
+输出: 4解释: n 等于 2, 最大总和为 4 = min
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/07/%E6%95%B0%E7%BB%84%E6%8B%86%E5%88%86I/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -627,6 +675,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/27/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/27/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -653,32 +711,17 @@
       
         
           
-            <h5 id="1-源题目"><a href="#1-源题目" class="headerlink" title="1.源题目"></a>1.源题目</h5><p><a href="https://leetcode-cn.com/problems/hamming-distance/description/" target="_blank" rel="noopener">汉明距离</a></p>
-<blockquote>
-<p> The Hamming distance between two integers is the number of positions at which the corresponding bits are different.<br>Given two integers x and y, calculate the Hamming distance.<br>Note:0 ≤ x, y &lt; 231.<br>Example:</p>
-<blockquote>
-<p>Input: x = 1, y = 4<br>Output: 2</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p> Explanation:<br>1   (0 0 0 1)<br>4   (0 1 0 0)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↑<br>The above arrows point to positions where the corresponding bits are different.</p>
-</blockquote>
-<h5 id="2-解决方法"><a href="#2-解决方法" class="headerlink" title="2.解决方法"></a>2.解决方法</h5><p>方法1.暴力求解:依次对比两个数的二进制位，出现不同则加1</p>
-<blockquote>
-<p> 1.一个数A左移一位后再右移一位得到A0<br>2.比较A和A0，如果A和A0相等，则说明A的二进制数的最后一位为0，否则为1</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> tempX = x;</span><br><span class="line">        <span class="keyword">int</span> tempY = y;</span><br><span class="line">        <span class="keyword">while</span>(tempX != <span class="number">0</span> || tempY != <span class="number">0</span>)&#123;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(tempX == (tempX&gt;&gt;<span class="number">1</span>)&lt;&lt;<span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(tempY != (tempY&gt;&gt;<span class="number">1</span>)&lt;&lt;<span class="number">1</span>)&#123;</span><br><span class="line">                    result++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(tempY == (tempY&gt;&gt;<span class="number">1</span>)&lt;&lt;<span class="number">1</span>)&#123;</span><br><span class="line">                    result++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            tempX = tempX&gt;&gt;<span class="number">1</span>;</span><br><span class="line">            tempY = tempY&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Solution test = <span class="keyword">new</span> Solution();</span><br><span class="line">        System.out.println(test.hammingDistance(<span class="number">4</span>, <span class="number">10</span>));       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          1.源题目汉明距离
 
-<p>方法2.通过二进制运算: 两个数异或后不同位为1，相同位的值为0，如x=1，y=4</p>
-<blockquote>
-<p> x^y = (001)^(100) = (101)</p>
-</blockquote>
-<p>n&amp;(n-1)则可使最后一位1变为0，计算出1的个数，即为汉明距离，解法见下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> temp = x ^ y;</span><br><span class="line">        System.out.println(temp);</span><br><span class="line">        <span class="keyword">while</span>(temp != <span class="number">0</span>)&#123;</span><br><span class="line">            temp = temp&amp;(temp-<span class="number">1</span>);</span><br><span class="line">            result++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Solution test = <span class="keyword">new</span> Solution();</span><br><span class="line">        System.out.println(test.hammingDistance(<span class="number">1</span>, <span class="number">4</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> 完整代码<a href="https://gitee.com/xdthesun/LeetCode.git" target="_blank" rel="noopener">HammingDistance</a></p>
-
-          
+ The Hamming distance between two integers is the number of positions at which the corresponding bits are different.Given two integers x an
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/27/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -792,6 +835,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -818,73 +871,18 @@
       
         
           
-            <h3 id="一、环境介绍"><a href="#一、环境介绍" class="headerlink" title="一、环境介绍"></a>一、环境介绍</h3><p>1.系统平台：ubuntu18.05<br>2.服务器：<a href="https://gitee.com/" target="_blank" rel="noopener">码云</a><br>3.静态博客生成工具：<a href="https://hexo.io/" target="_blank" rel="noopener">hexo</a></p>
-<h3 id="二、安装hexo"><a href="#二、安装hexo" class="headerlink" title="二、安装hexo"></a>二、安装hexo</h3><p>1.安装hexo前，需要先安装node.js</p>
-<blockquote>
-<p> sudo add-apt-repository ppa:chris-lea/node.js<br>sudo apt-get update<br>sudo apt-get install nodejs</p>
-</blockquote>
-<p>安装后执行如下命令</p>
-<blockquote>
-<p> npm -v</p>
-</blockquote>
-<p>输出如下内容则表示安装成功</p>
-<blockquote>
-<p> 5.6.0 或者其他版本号</p>
-</blockquote>
-<p>2.通过npm安装hexo</p>
-<blockquote>
-<p> npm install hexo -g</p>
-</blockquote>
-<p>若出现权限拒绝，无法执行的提示，则按照以下步骤执行</p>
-<blockquote>
-<p> sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}<br>npm install hexo -g</p>
-</blockquote>
-<p>检查hexo是否安装成功</p>
-<blockquote>
-<p>hexo -v</p>
-</blockquote>
-<p>出现类似如下内容，则表示安装成功</p>
-<blockquote>
-<p> hexo: 3.7.1<br>hexo-cli: 1.1.0<br>os: Linux 4.15.0-15-generic linux x64<br>http_parser: 2.8.0<br>node: 8.11.1<br>v8: 6.2.414.50<br>uv: 1.19.1<br>zlib: 1.2.11<br>ares: 1.10.1-DEV<br>modules: 57<br>nghttp2: 1.25.0<br>openssl: 1.0.2o<br>icu: 60.1<br>unicode: 10.0<br>cldr: 32.0<br>tz: 2017c</p>
-</blockquote>
-<p>3.初始化配置到本地<br>新建本地文件并进入对应目录</p>
-<blockquote>
-<p> mkdir yourblogfile<br> cd yourblogfile  </p>
-</blockquote>
-<p>初始化hexo</p>
-<blockquote>
-<p> hexo init<br> npm install<br> hexo g    </p>
-</blockquote>
-<p>启动hexo本地服务</p>
-<blockquote>
-<p> hexo s</p>
-</blockquote>
-<p>输出如下：</p>
-<blockquote>
-<p> INFO  Start processing<br>INFO  Hexo is running at <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>. Press Ctrl+C to stop.</p>
-</blockquote>
-<p>点击 <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>  则可看到如下已成功启动</p>
-<img src="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/hexo_home_page.jpg" class="" title="hexo默认界面">
+          一、环境介绍1.系统平台：ubuntu18.052.服务器：码云3.静态博客生成工具：hexo
+二、安装hexo1.安装hexo前，需要先安装node.js
 
-<h3 id="三、将本地文件配置到码云"><a href="#三、将本地文件配置到码云" class="headerlink" title="三、将本地文件配置到码云"></a>三、将本地文件配置到码云</h3><p>1.在码云中新建项目<br>如新建项目 yourblogfile，记住项目路径</p>
-<img src="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/newproject.jpg" class="" title="新建项目">
-<img src="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/gitpath.jpg" class="" title="git路径">
-
-<p>2.hexo中配置git</p>
-<blockquote>
-<p> deploy:<br>    type: git<br>    repo: yourbloggit的路径<br>    branch: master</p>
-</blockquote>
-<p>3.将本地文件一键配置到服务器</p>
-<blockquote>
-<p> hexo -g d</p>
-</blockquote>
-<p>3.开启码云的page服务,并通过码云page访问</p>
-<img src="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/startpage.jpg" class="" title="新建page">
-<img src="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/startserve.jpg" class="" title="启动服务">
-
-<p>以上！</p>
-
-          
+ sudo add-apt-repository ppa:chris-lea/node.jssudo apt-get updatesudo 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/26/ubuntu-hexo-%E7%A0%81%E4%BA%91%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -998,6 +996,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/24/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6git%E6%8F%90%E4%BA%A4%E5%88%B0%E7%A0%81%E4%BA%91/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/24/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6git%E6%8F%90%E4%BA%A4%E5%88%B0%E7%A0%81%E4%BA%91/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -1024,20 +1032,19 @@
       
         
           
-            <h3 id="本地文件git提交到码云上步骤："><a href="#本地文件git提交到码云上步骤：" class="headerlink" title="本地文件git提交到码云上步骤："></a>本地文件git提交到码云上步骤：</h3><h4 id="1-在服务器上新建项目"><a href="#1-在服务器上新建项目" class="headerlink" title="1.在服务器上新建项目"></a>1.在服务器上新建项目</h4><h4 id="2-在本地文件夹中初始化项目"><a href="#2-在本地文件夹中初始化项目" class="headerlink" title="2.在本地文件夹中初始化项目"></a>2.在本地文件夹中初始化项目</h4><blockquote>
-<p> git init<br>  已初始化空的 Git 仓库于 /home/xxxxx/文档/MyBlog/xdthsun/.git/</p>
-</blockquote>
-<h4 id="3-提交修改到服务器"><a href="#3-提交修改到服务器" class="headerlink" title="3.提交修改到服务器"></a>3.提交修改到服务器</h4><blockquote>
-<p> git add .<br>  git commit -m “修改记录”<br>  git remote add origin 服务器git地址<br>  git push origin master</p>
-</blockquote>
-<h4 id="若出现如下错误："><a href="#若出现如下错误：" class="headerlink" title="若出现如下错误："></a>若出现如下错误：</h4><blockquote>
-<p> 提示：更新被拒绝，因为远程仓库包含您本地尚不存在的提交。这通常是因为另外<br>  提示：一个仓库已向该引用进行了推送。再次推送前，您可能需要先整合远程变更<br>  提示：（如 ‘git pull …’）。<br>  提示：详见 ‘git push –help’ 中的 ‘Note about fast-forwards’ 小节。</p>
-</blockquote>
-<h4 id="手动执行："><a href="#手动执行：" class="headerlink" title="手动执行："></a>手动执行：</h4><blockquote>
-<p> git pull –rebase origin master<br>   git push origin master</p>
-</blockquote>
+          本地文件git提交到码云上步骤：1.在服务器上新建项目2.在本地文件夹中初始化项目
+ git init  已初始化空的 Git 仓库于 /home/xxxxx/文档/MyBlog/xdthsun/.git/
 
-          
+3.提交修改到服务器
+ git add .  git commit -m “修改记录”  
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/24/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6git%E6%8F%90%E4%BA%A4%E5%88%B0%E7%A0%81%E4%BA%91/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1129,6 +1136,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/23/hello-world/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/23/hello-world/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -1155,21 +1172,15 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/23/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1251,7 +1262,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/%20%7C%7C%20archive">
+                <a href="/archives/%7C%7C%20archive">
               
                   <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
@@ -1286,6 +1297,28 @@
           
 
           
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xdthesun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:xdtheusun@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3272134617/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  </span>
+                
+            </div>
+          
 
           
           
@@ -1312,7 +1345,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1330,12 +1363,32 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -1377,6 +1430,8 @@
   
 
 
+  
+
 
 
 
@@ -1417,6 +1472,11 @@
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
 
   
 
@@ -1429,6 +1489,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1470,9 +1537,348 @@
 
 
 
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'gtIDxTlRFSJA4urTEzxsnJgW-gzGzoHsz',
+        appKey: 'VT645xrtCLhlCCK5duRVOc2L',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
 
 
   
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
 
 
 
