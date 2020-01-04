@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="xdthesun">
 <meta property="og:description" content="在修改gitlab上工程代码后，重新生成一个分支后，再次触发pipeline，但是由于.gitlab-ci.yml文件中配置了only，导致新生成的分支无法触发pipeline，最先想到的是对.gitlab-ci.yml文件当作普通文件处理，这样对于文件的解析要求比较高，后查到有现成的yaml文件解析库，果断使用之。">
 <meta property="article:published_time" content="2020-01-03T12:55:44.000Z">
-<meta property="article:modified_time" content="2020-01-03T13:58:49.586Z">
+<meta property="article:modified_time" content="2020-01-04T02:01:28.759Z">
 <meta property="article:author" content="xdthesun">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="yaml">
@@ -445,7 +445,7 @@ yaml文件内容如下<figure class="highlight yaml"><table><tr><td class="gutte
 <h1 id="写入yaml文件"><a href="#写入yaml文件" class="headerlink" title="写入yaml文件"></a>写入yaml文件</h1><p>yaml库支持将字典格式的数据写入到yml文件中</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dict_data = &#123;<span class="string">'stages'</span>: [<span class="string">'prepare'</span>, <span class="string">'build'</span>], <span class="string">'prepare'</span>: &#123;<span class="string">'stage'</span>: <span class="string">'prepare'</span>, <span class="string">'script'</span>: [<span class="string">'med prepare -n prepare'</span>]&#125;, <span class="string">'build'</span>: &#123;<span class="string">'stage'</span>: <span class="string">'build'</span>, <span class="string">'script'</span>: [<span class="string">'med build -n release'</span>]&#125;&#125;</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"log/test2.yml"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    yaml.dump(dict_data, f)</span><br></pre></td></tr></table></figure>
 <p>可以看到生成文件test2.yml</p>
-<h1 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h1><ol>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><ol>
 <li>从test.yml文件中读出的内容，再写入到yaml文件中时，文件格式已发生变化，要想保持读出的文件格式无变化，可以使用<code>ruamel.yaml</code>，将读出文件的内容存放到了OrderedDict中<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ruamel.yaml</span><br></pre></td></tr></table></figure>
 实例<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ruamel <span class="keyword">import</span> yaml</span><br><span class="line">y = <span class="string">""</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"log/test.yml"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    y = yaml.load(f, Loader=yaml.RoundTripLoader)</span><br><span class="line">print(y)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"log/test2.yml"</span>, <span class="string">"w"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    yaml.dump(y, f, Dumper=yaml.RoundTripDumper)</span><br><span class="line">`</span><br></pre></td></tr></table></figure></li>
 <li>若原yaml文件中包含数组和字典对象，则读出文件后再写入时会出现异常，暂无找到合适的解决方法</li>
@@ -671,7 +671,7 @@ yaml文件内容如下<figure class="highlight yaml"><table><tr><td class="gutte
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读取yaml文件"><span class="nav-number">1.</span> <span class="nav-text">读取yaml文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写入yaml文件"><span class="nav-number">2.</span> <span class="nav-text">写入yaml文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意："><span class="nav-number">3.</span> <span class="nav-text">注意：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读取yaml文件"><span class="nav-number">1.</span> <span class="nav-text">读取yaml文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写入yaml文件"><span class="nav-number">2.</span> <span class="nav-text">写入yaml文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意"><span class="nav-number">3.</span> <span class="nav-text">注意</span></a></li></ol></div>
             
 
           </div>
