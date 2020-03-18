@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="python,身份证号生成," />
+  <meta name="keywords" content="python,logging,日志," />
 
 
 
@@ -79,23 +79,19 @@
 
 
 
-<meta name="description" content="最近开始接触金融相关的测试，发现在金融测试中身份证号是个很重要的数据，网上也有很多大佬自己写的身份证生成器，抱着学习的态度，花了两个晚上的时间用python写完了这个身份证号生成器 1. 身份证编码规则 1.1. 身份证地址码共6位，表示登记户口时所在地的行政区划代码（省、市、县），如下：    1.2. 出生年月日共8位，表示该居民的出生年月日，年4位数字，月和日分别用2位数字表示，如199">
+<meta name="description" content="最近在项目中需要用到python日志存储问题，之前一直使用的内部基于logging模块封装的，所以不用考虑日志存储问题，但是在新项目中只能直接使用logging来做日志打印和存储，所以学习了下日志的配置。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python实现身份证号生成器">
-<meta property="og:url" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/index.html">
+<meta property="og:title" content="python根据日期和大小自动切割">
+<meta property="og:url" content="http://xdthesun.github.io/2020/03/18/python%E6%A0%B9%E6%8D%AE%E6%97%A5%E6%9C%9F%E5%92%8C%E5%A4%A7%E5%B0%8F%E8%87%AA%E5%8A%A8%E5%88%87%E5%89%B2/index.html">
 <meta property="og:site_name" content="xdthesun">
-<meta property="og:description" content="最近开始接触金融相关的测试，发现在金融测试中身份证号是个很重要的数据，网上也有很多大佬自己写的身份证生成器，抱着学习的态度，花了两个晚上的时间用python写完了这个身份证号生成器 1. 身份证编码规则 1.1. 身份证地址码共6位，表示登记户口时所在地的行政区划代码（省、市、县），如下：    1.2. 出生年月日共8位，表示该居民的出生年月日，年4位数字，月和日分别用2位数字表示，如199">
-<meta property="og:image" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E8%BA%AB%E4%BB%BD%E8%AF%81%E6%A0%BC%E5%BC%8F.png">
-<meta property="og:image" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%9C%B0%E5%9D%80%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png">
-<meta property="og:image" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%8A%A0%E6%9D%83%E5%9B%A0%E5%AD%90%E8%A1%A8.png">
-<meta property="og:image" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E6%A0%A1%E9%AA%8C%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png">
-<meta property="article:published_time" content="2018-12-23T08:29:19.000Z">
-<meta property="article:modified_time" content="2019-12-27T10:56:31.039Z">
+<meta property="og:description" content="最近在项目中需要用到python日志存储问题，之前一直使用的内部基于logging模块封装的，所以不用考虑日志存储问题，但是在新项目中只能直接使用logging来做日志打印和存储，所以学习了下日志的配置。">
+<meta property="article:published_time" content="2020-03-18T07:41:19.000Z">
+<meta property="article:modified_time" content="2020-03-18T09:18:59.459Z">
 <meta property="article:author" content="xdthesun">
 <meta property="article:tag" content="python">
-<meta property="article:tag" content="身份证号生成">
+<meta property="article:tag" content="logging">
+<meta property="article:tag" content="日志">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E8%BA%AB%E4%BB%BD%E8%AF%81%E6%A0%BC%E5%BC%8F.png">
 
 
 
@@ -125,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://xdthesun.github.io/2018/12/23/python实现身份证号生成器/"/>
+  <link rel="canonical" href="http://xdthesun.github.io/2020/03/18/python根据日期和大小自动切割/"/>
 
 
 
 
 
-  <title>python实现身份证号生成器 | xdthesun</title>
+  <title>python根据日期和大小自动切割 | xdthesun</title>
   
 
 
@@ -292,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://xdthesun.github.io/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://xdthesun.github.io/2020/03/18/python%E6%A0%B9%E6%8D%AE%E6%97%A5%E6%9C%9F%E5%92%8C%E5%A4%A7%E5%B0%8F%E8%87%AA%E5%8A%A8%E5%88%87%E5%89%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xdthesun">
@@ -309,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python实现身份证号生成器</h1>
+          <h1 class="post-title" itemprop="name headline">python根据日期和大小自动切割</h1>
         
 
         <div class="post-meta">
@@ -321,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T16:29:19+08:00">
-                2018-12-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T15:41:19+08:00">
+                2020-03-18
               </time>
             
 
@@ -362,8 +358,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="commentCount"></span>
+                <a href="/2020/03/18/python%E6%A0%B9%E6%8D%AE%E6%97%A5%E6%9C%9F%E5%92%8C%E5%A4%A7%E5%B0%8F%E8%87%AA%E5%8A%A8%E5%88%87%E5%89%B2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/18/python%E6%A0%B9%E6%8D%AE%E6%97%A5%E6%9C%9F%E5%92%8C%E5%A4%A7%E5%B0%8F%E8%87%AA%E5%8A%A8%E5%88%87%E5%89%B2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -385,7 +381,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  878
+                  904
                 </span>
               
 
@@ -401,7 +397,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  3
                 </span>
               
             </div>
@@ -422,33 +418,31 @@
       
 
       
-        <p>  最近开始接触金融相关的测试，发现在金融测试中身份证号是个很重要的数据，网上也有很多大佬自己写的身份证生成器，抱着学习的态度，花了两个晚上的时间用python写完了这个身份证号生成器</p>
-<h2 id="1-身份证编码规则"><a href="#1-身份证编码规则" class="headerlink" title="1. 身份证编码规则"></a>1. 身份证编码规则</h2><img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E8%BA%AB%E4%BB%BD%E8%AF%81%E6%A0%BC%E5%BC%8F.png" class="">
-<h4 id="1-1-身份证地址码"><a href="#1-1-身份证地址码" class="headerlink" title="1.1. 身份证地址码"></a>1.1. 身份证地址码</h4><p>共6位，表示登记户口时所在地的行政区划代码（省、市、县），如下：</p>
-<img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%9C%B0%E5%9D%80%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png" class="">
+        <p>最近在项目中需要用到python日志存储问题，之前一直使用的内部基于<code>logging</code>模块封装的，所以不用考虑日志存储问题，但是在新项目中只能直接使用<code>logging</code>来做日志打印和存储，所以学习了下日志的配置。</p>
+<a id="more"></a>
 
-
-<h4 id="1-2-出生年月日"><a href="#1-2-出生年月日" class="headerlink" title="1.2. 出生年月日"></a>1.2. 出生年月日</h4><p>共8位，表示该居民的出生年月日，年4位数字，月和日分别用2位数字表示，如19930211</p>
-<h4 id="1-3-顺序码"><a href="#1-3-顺序码" class="headerlink" title="1.3. 顺序码"></a>1.3. 顺序码</h4><p>共3位，同一区域内同年同月同日生的人的顺序顺延，男生占偶数，女生占奇数，不足三位自动在前面补0，如某地区出生的第一位男生，则顺序码为002</p>
-<h4 id="1-4-校验码"><a href="#1-4-校验码" class="headerlink" title="1.4. 校验码"></a>1.4. 校验码</h4><p>共1位，校验码前面17位为本体位，校验码根据本体位计算得到<br>    1.4.1. 本体位每位和对应的加权因子相乘并求和得sum<br>    1.4.2. sum对11取余<br>    1.4.3. 根据余数和校验码对应表得到最后的校验码值</p>
-<h4 id="附："><a href="#附：" class="headerlink" title="附："></a>附：</h4> <img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E5%8A%A0%E6%9D%83%E5%9B%A0%E5%AD%90%E8%A1%A8.png" class="">
- <img src="/2018/12/23/python%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/%E6%A0%A1%E9%AA%8C%E7%A0%81%E5%AF%B9%E5%BA%94%E8%A1%A8.png" class="">
-
-<p>举例：44180020130412122(不包含校验码)</p>
+<h1 id="日志的基本配置"><a href="#日志的基本配置" class="headerlink" title="日志的基本配置"></a>日志的基本配置</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.basicConfig(level=logging.INFO, format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</span><br><span class="line">logger = logging.getLogger()</span><br><span class="line"></span><br><span class="line">logger.info(<span class="string">"logging info"</span>)</span><br><span class="line">logger.debug(<span class="string">"logging debug"</span>)</span><br><span class="line">logger.warning(<span class="string">"logging warning"</span>)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
 <blockquote>
-<ol>
-<li>sum = 4x7 + 4x9 + 1x10 + 8x5 + 0x8 + 0x4 + 2x2 + 0x1 + 1x6 + 3x3 + 0x7 + 4x9 + 1x10 + 2x5 + 1x8 + 2x4 +2x2 = 209   </li>
-<li>对11取余得0</li>
-<li>根据余数和校验码表得到对应值为1</li>
-</ol>
+<p>2020-03-18 16:05:39,095 - root - INFO - logging info<br>2020-03-18 16:05:39,095 - root - WARNING - logging warning</p>
 </blockquote>
-<p>tips：最后一位也可以根据m=12-sum%11得到，若x为10，则最后一位为X，否则为计算得到的m</p>
-<h2 id="2-python编码"><a href="#2-python编码" class="headerlink" title="2. python编码"></a>2. python编码</h2><h4 id="2-1-身份证地址码生成"><a href="#2-1-身份证地址码生成" class="headerlink" title="2.1. 身份证地址码生成"></a>2.1. 身份证地址码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getAddressNum</span><span class="params">(self, useRandom=True)</span>:</span></span><br><span class="line">        <span class="comment"># 存储地址和地址码之间的对应</span></span><br><span class="line">        addressToNumber = json.load(open(<span class="string">"function/json/addresstonumber.json"</span>, encoding=<span class="string">"utf-8"</span>))</span><br><span class="line">        <span class="comment"># 随机生成一个地址码</span></span><br><span class="line">        <span class="keyword">if</span> useRandom:</span><br><span class="line">            print(<span class="string">"随机生成一个地址码....."</span>)</span><br><span class="line">            tempAddress = random.sample(list(addressToNumber.keys()), <span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">            self.addressNum = addressToNumber[tempAddress]</span><br><span class="line">            <span class="keyword">return</span> self.addressNum, tempAddress</span><br><span class="line">        <span class="comment"># 根据用户提供的信息</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            address = input(<span class="string">"请输入省份或城市：\n"</span>)</span><br><span class="line">            tempList = []</span><br><span class="line">            <span class="keyword">if</span> len(address) == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> self.getAddressNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> addressToNumber.keys():</span><br><span class="line">                <span class="keyword">if</span> address <span class="keyword">in</span> x:</span><br><span class="line">                    tempList.append(x)</span><br><span class="line">            <span class="keyword">if</span> len(tempList) == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"输入的省份或城市未找打，请确认！"</span>)</span><br><span class="line">                <span class="keyword">return</span> self.getAddressNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">            print(<span class="string">"请选择对应的城市:"</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(tempList)):</span><br><span class="line">                print(str(i) + <span class="string">"."</span> + tempList[i])</span><br><span class="line">            num = input(<span class="string">"请输入对应城市编号（默认则为随机选择以下任意一个城市）:"</span>)</span><br><span class="line">            <span class="keyword">if</span> len(num) == <span class="number">0</span>:</span><br><span class="line">                num = random.randint(<span class="number">0</span>, len(tempList))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                num = int(num)</span><br><span class="line">            tempNumber = addressToNumber[tempList[num]]</span><br><span class="line">            self.addressNum = tempNumber</span><br><span class="line">            <span class="keyword">return</span> tempNumber, tempList[int(num)]</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-出生年月生成"><a href="#2-2-出生年月生成" class="headerlink" title="2.2. 出生年月生成"></a>2.2. 出生年月生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getBirthdayNum</span><span class="params">(self, useRandom=True)</span>:</span></span><br><span class="line">        <span class="comment"># 随机生成一个年月日</span></span><br><span class="line">        <span class="keyword">if</span> useRandom:</span><br><span class="line">            print(<span class="string">"随机生成一个出生日期......"</span>)</span><br><span class="line">            startTime = int(time.mktime((<span class="number">1984</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)))</span><br><span class="line">            endTime = int(time.time())</span><br><span class="line">            x = random.randrange(startTime, endTime)</span><br><span class="line">            date_touple = time.localtime(x)</span><br><span class="line">            date = time.strftime(<span class="string">"%Y%m%d"</span>, date_touple)</span><br><span class="line">            self.birthdayNum = date</span><br><span class="line">            <span class="keyword">return</span> date</span><br><span class="line">        <span class="comment"># 根据用户提供的信息</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            birthday = input(<span class="string">"请输8位生日（格式xxxxxxxx，如19930405）："</span>)</span><br><span class="line">            <span class="keyword">if</span> len(birthday) == <span class="number">0</span>:</span><br><span class="line">                self.birthdayNum = self.getBirthdayNum()</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br><span class="line">            <span class="keyword">elif</span> len(birthday) != <span class="number">8</span>:</span><br><span class="line">                print(<span class="string">"输入有误！"</span>)</span><br><span class="line">                self.birthdayNum = self.getBirthdayNum(useRandom=<span class="literal">False</span>)</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.birthdayNum = birthday</span><br><span class="line">                <span class="keyword">return</span> self.birthdayNum</span><br></pre></td></tr></table></figure>
-<h4 id="2-3-顺序码生成"><a href="#2-3-顺序码生成" class="headerlink" title="2.3. 顺序码生成"></a>2.3. 顺序码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getOrder</span><span class="params">(self)</span>:</span></span><br><span class="line">        temp = random.randint(<span class="number">0</span>, <span class="number">999</span>)</span><br><span class="line">        <span class="keyword">if</span> temp &lt; <span class="number">10</span>:</span><br><span class="line">            self.orderNum = <span class="string">'00'</span> + str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br><span class="line">        <span class="keyword">elif</span> temp &lt; <span class="number">100</span>:</span><br><span class="line">            self.orderNum = <span class="string">'0'</span> + str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.orderNum = str(temp)</span><br><span class="line">            <span class="keyword">return</span> self.orderNum</span><br></pre></td></tr></table></figure>
-<h4 id="2-4-校验码生成"><a href="#2-4-校验码生成" class="headerlink" title="2.4. 校验码生成"></a>2.4. 校验码生成</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLastCode</span><span class="params">(self, top17=<span class="string">''</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 加权因子</span></span><br><span class="line">        factorNumber = [<span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>]</span><br><span class="line">        <span class="keyword">if</span> len(top17) == <span class="number">0</span>:</span><br><span class="line">            temp = self.addressNum + self.birthdayNum + self.orderNum</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            temp = top17</span><br><span class="line">        lastcodetemp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, j <span class="keyword">in</span> zip(factorNumber, temp):</span><br><span class="line">            lastcodetemp = lastcodetemp + i * int(j)</span><br><span class="line">        lastcodetemp = <span class="number">12</span> - lastcodetemp</span><br><span class="line">        lastcode = <span class="string">'X'</span> <span class="keyword">if</span> lastcodetemp % <span class="number">11</span> == <span class="number">10</span> <span class="keyword">else</span> lastcodetemp % <span class="number">11</span></span><br><span class="line">        self.lastCode = str(lastcode)</span><br><span class="line">        <span class="keyword">return</span> lastcode</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://github.com/xdthesun/GetInfomation/blob/master/function/IDNumber.py" target="_blank" rel="noopener">完整代码</a></p>
+<p>从输出中可以看到打印了特定格式的日志，并且<code>logger.debug(&quot;logging debug&quot;)</code> 并未打印，下面将介绍日志的输出格式和日志级别对输出的控制。</p>
+<h3 id="日志输出格式"><a href="#日志输出格式" class="headerlink" title="日志输出格式"></a>日志输出格式</h3><blockquote>
+<p>%(levelno)s：打印日志级别的数值<br>%(levelname)s：打印日志级别的名称<br>%(pathname)s：打印当前执行程序的路径，其实就是sys.argv[0]<br>%(filename)s：打印当前执行程序名<br>%(funcName)s：打印日志的当前函数<br>%(lineno)d：打印日志的当前行号<br>%(asctime)s：打印日志的时间<br>%(thread)d：打印线程ID<br>%(threadName)s：打印线程名称<br>%(process)d：打印进程ID<br>%(message)s：打印日志信息</p>
+</blockquote>
+<p>可以在日志<code>logging.basicConfig</code>中配置日志格式，也可以在对应的<code>handler</code>实例中设置，如果是<code>logging.basicConfig</code>中配置，则只需将对应格式传入<code>format</code>参数即可，但是若在<code>handler</code>中设置，则需要先初始化成<code>logging.Formatter</code>类。</p>
+<h3 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h3><p>日志类会根据设置的日志级别来控制输出，日志优先级为<code>NOTSET &lt; DEBUG &lt; INFO &lt; WARNING &lt; ERROR &lt; CRITICAL</code>，只能设置比设置的日志级别更高级别的日志，比如当前设置的级别是<code>INFO</code>,则不会输出<code>DEBUG</code>和<code>NOTSET</code>级别的日志</p>
+<h1 id="根据大小切割"><a href="#根据大小切割" class="headerlink" title="根据大小切割"></a>根据大小切割</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">from</span> logging.handlers <span class="keyword">import</span> RotatingFileHandler</span><br><span class="line">LOG_FILE_PATH = <span class="string">"test/test.log"</span></span><br><span class="line">date_fmt = <span class="string">'%d-%b-%Y %H:%M:%S'</span></span><br><span class="line">def_format = <span class="string">"%(asctime)s[%(levelname)s] %(filename)s %(message)s"</span></span><br><span class="line">logger_format = logging.Formatter(def_format, date_fmt)</span><br><span class="line">logger = logging.getLogger(<span class="string">"test"</span>)</span><br><span class="line">logger.setLevel(logging.INFO)  <span class="comment"># 如果在addhandler前不执行这一步，则不会打印日志</span></span><br><span class="line">ro_handler = RotatingFileHandler(LOG_FILE_PATH, maxBytes=<span class="number">2048</span>, backupCount=<span class="number">3</span>, encoding=<span class="string">"utf-8"</span>)</span><br><span class="line">ro_handler.setFormatter(logger_format)</span><br><span class="line">logger.addHandler(ro_handler)</span><br></pre></td></tr></table></figure>
+<h3 id="RotatingFileHandler类介绍"><a href="#RotatingFileHandler类介绍" class="headerlink" title="RotatingFileHandler类介绍"></a>RotatingFileHandler类介绍</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> logging.handlers <span class="keyword">import</span> RotatingFileHandler</span><br><span class="line">ro_handler = RotatingFileHandler(filename=<span class="string">"test/test.log"</span>, mode=<span class="string">'a'</span>, maxBytes=<span class="number">0</span>, backupCount=<span class="number">0</span>, encoding=<span class="literal">None</span>, delay=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>filename 指定日志文件<br>mode 日志写入文件的模式，默认为a也即追加模式<br>maxBytes 单个日志文件最大容量，单位为字节，也即1024 为1M<br>backupCount 日志备份数，当前日志量等于maxBytes时，日志会自动切分成filename.1到filename.backupCount<br>encoding 日志编码格式，建议设置成utf-8，否则写入中文时会报warning<br>delay 是否需要开启缓存，默认不缓存，若开启缓存，则日志会先写入缓存，等缓存区满后再写入文件中</p>
+</blockquote>
+<h1 id="根据时间切割"><a href="#根据时间切割" class="headerlink" title="根据时间切割"></a>根据时间切割</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">from</span> logging.handlers <span class="keyword">import</span> RotatingFileHandler, TimedRotatingFileHandler</span><br><span class="line">LOG_FILE_PATH = <span class="string">"test.log"</span></span><br><span class="line">date_fmt = <span class="string">'%d-%b-%Y %H:%M:%S'</span></span><br><span class="line">def_format = <span class="string">"%(asctime)s[%(levelname)s] %(filename)s %(message)s"</span></span><br><span class="line">logger_format = logging.Formatter(def_format, date_fmt)</span><br><span class="line">logger = logging.getLogger(<span class="string">"test"</span>)</span><br><span class="line">logger.setLevel(logging.INFO)  <span class="comment"># 如果在addhandler前不执行这一步，则不会打印日志</span></span><br><span class="line">time_handler = TimedRotatingFileHandler(LOG_FILE_PATH, when=<span class="string">'D'</span>, interval=<span class="number">1</span>, backupCount=<span class="number">2</span>, encoding=<span class="string">"utf-8"</span>, delay=<span class="literal">False</span>, utc=<span class="literal">True</span>, atTime=<span class="literal">False</span>)</span><br><span class="line">time_handler.setFormatter(logger_format)</span><br><span class="line">logger.addHandler(time_handler)</span><br><span class="line">logger.debug(<span class="string">"这是一个debug信息"</span>)</span><br><span class="line">logger.info(<span class="string">"这是一个info信息"</span>)</span><br><span class="line">logger.error(<span class="string">"这是一个error信息"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="TimedRotatingFileHandler类"><a href="#TimedRotatingFileHandler类" class="headerlink" title="TimedRotatingFileHandler类"></a>TimedRotatingFileHandler类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> logging.handlers <span class="keyword">import</span> TimedRotatingFileHandler</span><br><span class="line">ro_handler = TimedRotatingFileHandler(filename=<span class="string">"test/test.log"</span>, when=<span class="string">'D'</span>, interval=<span class="number">1</span>, backupCount=<span class="number">2</span>, encoding=<span class="string">"utf-8"</span>, delay=<span class="literal">False</span>, utc=<span class="literal">True</span>, atTime=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>when  s 秒； m 分钟； h 小时； d 天  设置后会按照指定的方式进行切割，比如设置为s，则美妙会生成一个文件<br>interval  指等待多少个when后执行创建<br>utc  是否启用utc时区</p>
+</blockquote>
+<p>以上</p>
 
       
     </div>
@@ -492,7 +486,9 @@
           
             <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
           
-            <a href="/tags/%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%94%9F%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 身份证号生成</a>
+            <a href="/tags/logging/" rel="tag"><i class="fa fa-tag"></i> logging</a>
+          
+            <a href="/tags/%E6%97%A5%E5%BF%97/" rel="tag"><i class="fa fa-tag"></i> 日志</a>
           
         </div>
       
@@ -505,8 +501,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/07/%E6%95%B0%E7%BB%84%E6%8B%86%E5%88%86I/" rel="next" title="数组拆分 I">
-                <i class="fa fa-chevron-left"></i> 数组拆分 I
+              <a href="/2020/01/13/%E9%9A%8F%E7%AC%94-%E6%AF%8F%E6%97%A5%E6%9B%B4%E6%96%B0/" rel="next" title="随笔">
+                <i class="fa fa-chevron-left"></i> 随笔
               </a>
             
           </div>
@@ -514,10 +510,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/25/python%E5%AE%9E%E7%8E%B0%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E7%94%9F%E6%88%90%E5%99%A8/" rel="prev" title="python实现银行卡号生成器">
-                python实现银行卡号生成器 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -674,7 +666,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-身份证编码规则"><span class="nav-number">1.</span> <span class="nav-text">1. 身份证编码规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-身份证地址码"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1. 身份证地址码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-出生年月日"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2. 出生年月日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-顺序码"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3. 顺序码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-校验码"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.4. 校验码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附："><span class="nav-number">1.0.5.</span> <span class="nav-text">附：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-python编码"><span class="nav-number">2.</span> <span class="nav-text">2. python编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-身份证地址码生成"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1. 身份证地址码生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-出生年月生成"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2. 出生年月生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-顺序码生成"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3. 顺序码生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-校验码生成"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4. 校验码生成</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#日志的基本配置"><span class="nav-number">1.</span> <span class="nav-text">日志的基本配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志输出格式"><span class="nav-number">1.0.1.</span> <span class="nav-text">日志输出格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志级别"><span class="nav-number">1.0.2.</span> <span class="nav-text">日志级别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据大小切割"><span class="nav-number">2.</span> <span class="nav-text">根据大小切割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RotatingFileHandler类介绍"><span class="nav-number">2.0.1.</span> <span class="nav-text">RotatingFileHandler类介绍</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据时间切割"><span class="nav-number">3.</span> <span class="nav-text">根据时间切割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TimedRotatingFileHandler类"><span class="nav-number">3.0.1.</span> <span class="nav-text">TimedRotatingFileHandler类</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
